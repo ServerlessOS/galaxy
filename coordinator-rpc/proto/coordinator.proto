@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+option go_package = "./;coordinator_rpc";
+package dispatcher;
+
+// 1. 请求分发
+// 2. 调用扩容请求
+// 3. 更新调度器视图
+service coordinator {
+  rpc AddNodeInfo(NodeInfoUpdate) returns (CoordinatorReply){}
+  rpc AddSchedulerInfo(SchedulerInfoUpdate) returns (CoordinatorReply){}
+  rpc AddDispatcherInfo(DispatcherInfoUpdate) returns (CoordinatorReply){}
+  rpc GatewayRegister(GatewayRegisterReq)returns(GatewayRegisterResp){}
+}
+message GatewayRegisterReq{//由服务端直接解析客户端ip
+  string GatewayName=1;
+}
+message GatewayRegisterResp {
+  repeated DispatcherInfo dispatchers = 1;
+
+  message DispatcherInfo {
+    string name = 1;
+    string address = 2;
+  }
+}
+message NodeInfoUpdate{
+  string NodeName = 1;
+  string Address = 2;
+  int64 HaveCpu = 3;
+  int64 HaveMem = 4;
+}
+
+message SchedulerInfoUpdate{
+  string SchedulerName = 1;
+  string Address = 2;
+}
+
+message DispatcherInfoUpdate{
+  string SchedulerName = 1;
+  string Address = 2;
+}
+
+message CoordinatorReply{
+  int64 state = 1;
+  string message = 2;
+}
+
+

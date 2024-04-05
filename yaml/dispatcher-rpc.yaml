@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dispatcher-deployment
+spec:
+  replicas: 20
+  selector:
+    matchLabels:
+      app: dispatcher
+  template:
+    metadata:
+      labels:
+        app: dispatcher
+    spec:
+      containers:
+        - name: dispatcher-rpc
+          image: bszpe/dispatcher-rpc:latest
+          imagePullPolicy: IfNotPresent
+#          resources:
+#            limits:
+#              memory: "4Gi"
+#              cpu: "2"
+          ports:
+            - containerPort: 16444
+      nodeSelector:
+        virtual: dpu

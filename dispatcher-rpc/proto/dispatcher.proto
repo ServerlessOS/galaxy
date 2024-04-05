@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option go_package = "./;dispatcher_rpc";
+package dispatcher;
+
+// 1. 请求分发
+// 2. 调用扩容请求
+// 3. 更新调度器视图
+service dispatcher {
+  rpc Dispatch(UserRequestList) returns (UserRequestReply){}
+  rpc UpdateInstanceView(InstanceUpdate) returns (InstanceUpdateReply){}
+  rpc UpdateSchedulerView(SchedulerViewUpdate) returns (SchedulerViewUpdateReply){}
+  rpc Statis(UserRequest) returns (UserRequestReply){}
+}
+
+message UserRequest{
+  int64 RequestId = 1;
+  string FuncName = 2;
+  int64 RequireCpu = 3;
+  int64 RequireMem = 4;
+}
+message UserRequestReply{
+  int64 RequestId = 1;
+  string FuncName = 2;
+  string Destination = 3;
+}
+
+message UserRequestList{
+  repeated UserRequest list = 1;
+}
+message InstanceInfo{
+  int64 RequestId = 1;
+  string FuncName = 2;
+  string Address = 3;
+}
+message InstanceUpdate{
+  repeated InstanceInfo list = 1;
+  string Action = 2;
+}
+message InstanceUpdateReply{
+  int64 State = 1;
+}
+
+
+message SchedulerInfo{
+  string NodeName = 1;
+  string Address = 2;
+}
+message SchedulerViewUpdate{
+  repeated SchedulerInfo list = 1;
+  string Action = 2;
+}
+
+message SchedulerViewUpdateReply{
+  int64 State = 1;
+}

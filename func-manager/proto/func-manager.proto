@@ -1,0 +1,126 @@
+syntax = "proto3";
+option go_package = "./;func-manager";
+package funcManager;
+
+service funcManager {
+  //可以添加apply便于批量化操作、auth提供权限管理能力
+//  rpc Create(CreateReq) returns(GeneralResp){}
+//  rpc Delete(DeleteReq)returns(GeneralResp){}
+//  rpc Label(ExpansionReq)returns(GeneralResp){}
+//  rpc Annotation(ExpansionReq)returns(GeneralResp){}
+//  rpc Get(GetReq) returns(GetResp){}
+//  rpc Describe(DescribeReq) returns(DescribeResp){}
+//  rpc Logs(LogsReq) returns(LogsResp){}
+//  rpc Version(VersionReq)returns(VersionResp){}
+  rpc userCommend(UserCommendRequest)returns(GeneralResp){}
+  rpc registerGateway(RegisterReq)returns(GeneralResp){}
+}
+message RegisterReq{
+  int64 requestId = 1;
+  string name = 2;
+  string address = 3;
+  string port = 4;
+}
+message UserCommendRequest{
+  int64 requestId = 1;
+  string command = 2;
+}
+message CreateReq{
+  int64 RequestId = 1;
+  optional  string Type = 2;
+  string Name = 3;
+  optional  string Spec = 4;
+  optional string Labels = 5;
+  optional  string Annotations = 6;
+  optional  string specialInformation = 7;
+}
+message DeleteReq{
+  int64 requestId = 1;
+  optional string type = 2;
+  string name = 3;
+  optional string Labels = 4;
+  optional  string Annotations = 5;
+  optional  string specialInformation = 6;
+}
+message GetReq{
+  int64 requestId = 1;
+  optional string type = 2;
+  string name = 3;
+  optional string Labels = 4;
+  optional  string Annotations = 5;
+  optional  string specialInformation = 6;
+}
+message GetResp{
+  int64 requestId = 1;
+  int64 statusCode = 2;
+  string description = 3;
+}
+message DescribeReq{
+  int64 requestId = 1;
+  optional string type = 2;
+  string name = 3;
+  optional string Labels = 4;
+  optional  string Annotations = 5;
+  optional  string specialInformation = 6;
+}
+message DescribeResp{
+  int64 requestId = 1;
+  int64 statusCode = 2;
+  string description = 3;
+}
+message LogsReq{
+  int64 requestId = 1;
+  optional string type = 2;
+  string name = 3;
+  optional string Labels = 4;
+  optional  string Annotations = 5;
+  optional  string specialInformation = 6;
+}
+message LogsResp{
+  int64 requestId = 1;
+  int64 statusCode = 2;
+  string description = 3;
+}
+message UnregisterReq{
+  int64 requestId = 1;
+  optional string type = 2;
+  string name = 3;
+  optional string Labels = 4;
+  optional  string Annotations = 5;
+  optional  string specialInformation = 6;
+}
+message VersionReq{
+  int64 requestId = 1;
+}
+message VersionResp{
+  int64 requestId = 1;
+  int64 statusCode = 2;
+  string description = 3;
+}
+message ExpansionReq{
+  enum ExpansionType {
+    dispatcher = 0;
+    scheduler = 1;
+    node = 2;
+  }
+
+  int64 requestId = 1;
+  ExpansionType type = 2;
+  string specialInformation = 3;
+}
+message UpdateGatewayListReq {
+  enum OperationType {
+    APPEND = 0;
+    REDUCE = 1;
+    OVERRIDE = 2;
+  }
+
+  OperationType type = 1; // 操作类型 追加/减少/覆盖
+  map<string, string> gatewayList = 2;; // 网关列表
+}
+
+message GeneralResp{
+  int64 statusCode = 1;
+  string description = 2;
+  string errorInformation = 3;
+}

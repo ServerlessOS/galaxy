@@ -1,0 +1,670 @@
+ADD new NodeResource: virtual-node-deployment-596f8dc867-c24vq
+ADD new NodeResource: virtual-node-deployment-596f8dc867-zbs27
+ADD new NodeResource: virtual-node-deployment-596f8dc867-699cn
+ADD new NodeResource: virtual-node-deployment-596f8dc867-f59q6
+ADD new NodeResource: virtual-node-deployment-596f8dc867-thcjj
+ADD new NodeResource: virtual-node-deployment-596f8dc867-fhqn8
+ADD new NodeResource: virtual-node-deployment-596f8dc867-nlnzb
+ADD new NodeResource: virtual-node-deployment-596f8dc867-snfhj
+ADD new NodeResource: virtual-node-deployment-596f8dc867-cljpr
+ADD new NodeResource: virtual-node-deployment-596f8dc867-z4zdq
+ADD new NodeResource: virtual-node-deployment-596f8dc867-v2cgr
+ADD new NodeResource: virtual-node-deployment-596f8dc867-qwsv2
+2023/12/12 12:16:04 Scheduler receive -66- at -1702383364952
+2023/12/12 12:16:04 Scheduler receive -62- at -1702383364952
+2023/12/12 12:16:04 Scheduler receive -198- at -1702383364953
+2023/12/12 12:16:04 deploy -66-Func-66 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364953
+2023/12/12 12:16:04 Scheduler receive -122- at -1702383364953
+2023/12/12 12:16:04 Scheduler receive -118- at -1702383364953
+Cache miss!
+2023/12/12 12:16:04 Scheduler receive -158- at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -50- at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -6- at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -162- at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -142- at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -170- at -1702383364956
+Cache hitted!
+2023/12/12 12:16:04 deploy -158-Func-158 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364957
+Cache hitted!
+2023/12/12 12:16:04 deploy -162-Func-162 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364957
+Cache hitted!
+2023/12/12 12:16:04 deploy -142-Func-142 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364958
+Cache hitted!
+2023/12/12 12:16:04 deploy -170-Func-170 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364958
+2023/12/12 12:16:04 deploy -6-Func-6 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364958
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -50-Func-50 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364958
+Cache hitted!
+2023/12/12 12:16:04 deploy -198-Func-198 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364959
+Cache hitted!
+2023/12/12 12:16:04 deploy -118-Func-118 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364959
+2023/12/12 12:16:04 deploy -122-Func-122 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364959
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -62-Func-62 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364960
+2023/12/12 12:16:04 Scheduler receive -174- at -1702383364984
+2023/12/12 12:16:04 deploy -174-Func-174 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364984
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -34- at -1702383364985
+2023/12/12 12:16:04 Scheduler receive -126- at -1702383364985
+2023/12/12 12:16:04 Scheduler receive -154- at -1702383364985
+2023/12/12 12:16:04 deploy -34-Func-34 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364985
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -186- at -1702383364985
+2023/12/12 12:16:04 Scheduler receive -70- at -1702383364985
+2023/12/12 12:16:04 Scheduler receive -74- at -1702383364985
+2023/12/12 12:16:04 Scheduler receive -90- at -1702383364985
+2023/12/12 12:16:04 Scheduler receive -42- at -1702383364985
+2023/12/12 12:16:04 Scheduler receive -130- at -1702383364986
+2023/12/12 12:16:04 Scheduler receive -110- at -1702383364986
+2023/12/12 12:16:04 deploy -130-Func-130 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364986
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -78- at -1702383364986
+2023/12/12 12:16:04 Scheduler receive -114- at -1702383364986
+Cache hitted!
+2023/12/12 12:16:04 deploy -110-Func-110 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364986
+2023/12/12 12:16:04 Scheduler receive -178- at -1702383364986
+2023/12/12 12:16:04 deploy -78-Func-78 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364987
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -114-Func-114 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364987
+2023/12/12 12:16:04 Scheduler receive -21- at -1702383364987
+Cache hitted!
+2023/12/12 12:16:04 deploy -21-Func-21 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -102- at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -54- at -1702383364988
+Cache hitted!
+2023/12/12 12:16:04 deploy -102-Func-102 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -98- at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -29- at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -58- at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -134- at -1702383364988
+Cache hitted!
+2023/12/12 12:16:04 deploy -54-Func-54 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -86- at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -138- at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -106- at -1702383364988
+2023/12/12 12:16:04 deploy -98-Func-98 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364989
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -46- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -94- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -150- at -1702383364989
+2023/12/12 12:16:04 deploy -46-Func-46 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364989
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -146- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -82- at -1702383364989
+2023/12/12 12:16:04 deploy -94-Func-94 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364989
+Cache hitted!
+2023/12/12 12:16:04 deploy -150-Func-150 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364989
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -146-Func-146 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364990
+Cache hitted!
+2023/12/12 12:16:04 deploy -82-Func-82 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364990
+2023/12/12 12:16:04 deploy -138-Func-138 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364990
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -29-Func-29 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364990
+2023/12/12 12:16:04 deploy -86-Func-86 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364991
+Cache hitted!
+2023/12/12 12:16:04 deploy -106-Func-106 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364991
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -134-Func-134 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364991
+2023/12/12 12:16:04 deploy -58-Func-58 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364991
+Cache hitted!
+2023/12/12 12:16:04 deploy -178-Func-178 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364992
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -126-Func-126 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364992
+2023/12/12 12:16:04 deploy -186-Func-186 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364992
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -90-Func-90 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364992
+Cache hitted!
+2023/12/12 12:16:04 deploy -42-Func-42 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364992
+Cache hitted!
+2023/12/12 12:16:04 deploy -70-Func-70 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364993
+2023/12/12 12:16:04 deploy -74-Func-74 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364993
+Cache hitted!
+2023/12/12 12:16:04 deploy -154-Func-154 to node virtual-node-deployment-596f8dc867-qwsv2 at -1702383364994
+Cache hitted!
+ADD new NodeResource: virtual-node-deployment-596f8dc867-mgfd9
+ADD new NodeResource: virtual-node-deployment-596f8dc867-q2sw6
+ADD new NodeResource: virtual-node-deployment-596f8dc867-vwmsc
+ADD new NodeResource: virtual-node-deployment-596f8dc867-x6klt
+ADD new NodeResource: virtual-node-deployment-596f8dc867-vkddw
+ADD new NodeResource: virtual-node-deployment-596f8dc867-h86j7
+ADD new NodeResource: virtual-node-deployment-596f8dc867-xhg5f
+ADD new NodeResource: virtual-node-deployment-596f8dc867-xbq6l
+ADD new NodeResource: virtual-node-deployment-596f8dc867-d87r5
+ADD new NodeResource: virtual-node-deployment-596f8dc867-dsmlh
+ADD new NodeResource: virtual-node-deployment-596f8dc867-bcncw
+ADD new NodeResource: virtual-node-deployment-596f8dc867-cdkkm
+2023/12/12 12:16:04 Scheduler receive -8- at -1702383364988
+2023/12/12 12:16:04 deploy -8-Func-8 to node virtual-node-deployment-596f8dc867-cdkkm at -1702383364989
+Cache miss!
+2023/12/12 12:16:04 Scheduler receive -192- at -1702383364991
+2023/12/12 12:16:04 deploy -192-Func-192 to node virtual-node-deployment-596f8dc867-cdkkm at -1702383364991
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -0- at -1702383364991
+2023/12/12 12:16:04 Scheduler receive -36- at -1702383364991
+2023/12/12 12:16:04 Scheduler receive -164- at -1702383364992
+2023/12/12 12:16:04 deploy -0-Func-0 to node virtual-node-deployment-596f8dc867-cdkkm at -1702383364993
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -12- at -1702383364993
+2023/12/12 12:16:04 Scheduler receive -190- at -1702383364993
+2023/12/12 12:16:04 Scheduler receive -22- at -1702383364994
+2023/12/12 12:16:04 Scheduler receive -24- at -1702383364993
+2023/12/12 12:16:04 Scheduler receive -16- at -1702383364994
+Cache hitted!
+2023/12/12 12:16:04 deploy -22-Func-22 to node virtual-node-deployment-596f8dc867-cdkkm at -1702383364994
+Cache hitted!
+2023/12/12 12:16:04 deploy -16-Func-16 to node virtual-node-deployment-596f8dc867-cdkkm at -1702383364995
+2023/12/12 12:16:04 deploy -24-Func-24 to node virtual-node-deployment-596f8dc867-cdkkm at -1702383364995
+Cache hitted!
+2023/12/12 12:16:04 deploy -190-Func-190 to node virtual-node-deployment-596f8dc867-cdkkm at -1702383364995
+Cache hitted!
+2023/12/12 12:16:04 deploy -12-Func-12 to node virtual-node-deployment-596f8dc867-cdkkm at -1702383364996
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -164-Func-164 to node virtual-node-deployment-596f8dc867-cdkkm at -1702383364996
+2023/12/12 12:16:04 deploy -36-Func-36 to node virtual-node-deployment-596f8dc867-cdkkm at -1702383364996
+Cache hitted!
+ADD new NodeResource: virtual-node-deployment-596f8dc867-sppjn
+ADD new NodeResource: virtual-node-deployment-596f8dc867-872q8
+ADD new NodeResource: virtual-node-deployment-596f8dc867-pvmqm
+2023/12/12 12:16:05 Scheduler receive -9- at -1702383365007
+2023/12/12 12:16:05 deploy -9-Func-9 to node virtual-node-deployment-596f8dc867-pvmqm at -1702383365007
+Cache miss!
+2023/12/12 12:16:05 Scheduler receive -1- at -1702383365010
+2023/12/12 12:16:05 Scheduler receive -193- at -1702383365010
+2023/12/12 12:16:05 deploy -1-Func-1 to node virtual-node-deployment-596f8dc867-pvmqm at -1702383365010
+Cache hitted!
+2023/12/12 12:16:05 Scheduler receive -182- at -1702383365010
+Cache hitted!
+2023/12/12 12:16:05 deploy -193-Func-193 to node virtual-node-deployment-596f8dc867-pvmqm at -1702383365011
+2023/12/12 12:16:05 Scheduler receive -37- at -1702383365011
+2023/12/12 12:16:05 Scheduler receive -30- at -1702383365011
+2023/12/12 12:16:05 Scheduler receive -165- at -1702383365011
+2023/12/12 12:16:05 Scheduler receive -13- at -1702383365011
+2023/12/12 12:16:05 deploy -37-Func-37 to node virtual-node-deployment-596f8dc867-pvmqm at -1702383365011
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:05 deploy -13-Func-13 to node virtual-node-deployment-596f8dc867-pvmqm at -1702383365012
+2023/12/12 12:16:05 deploy -165-Func-165 to node virtual-node-deployment-596f8dc867-pvmqm at -1702383365012
+Cache hitted!
+2023/12/12 12:16:05 Scheduler receive -25- at -1702383365012
+2023/12/12 12:16:05 Scheduler receive -17- at -1702383365013
+Cache hitted!
+2023/12/12 12:16:05 deploy -17-Func-17 to node virtual-node-deployment-596f8dc867-pvmqm at -1702383365013
+2023/12/12 12:16:05 deploy -25-Func-25 to node virtual-node-deployment-596f8dc867-pvmqm at -1702383365014
+Cache hitted!
+2023/12/12 12:16:05 deploy -30-Func-30 to node virtual-node-deployment-596f8dc867-pvmqm at -1702383365015
+Cache hitted!
+2023/12/12 12:16:05 deploy -182-Func-182 to node virtual-node-deployment-596f8dc867-pvmqm at -1702383365015
+Cache hitted!
+ADD new NodeResource: virtual-node-deployment-596f8dc867-bnrd6
+ADD new NodeResource: virtual-node-deployment-596f8dc867-gzsgb
+ADD new NodeResource: virtual-node-deployment-596f8dc867-nvqfz
+ADD new NodeResource: virtual-node-deployment-596f8dc867-pcrwn
+ADD new NodeResource: virtual-node-deployment-596f8dc867-fp7b6
+ADD new NodeResource: virtual-node-deployment-596f8dc867-7snvq
+ADD new NodeResource: virtual-node-deployment-596f8dc867-7sbn2
+ADD new NodeResource: virtual-node-deployment-596f8dc867-6x95t
+ADD new NodeResource: virtual-node-deployment-596f8dc867-9sljq
+ADD new NodeResource: virtual-node-deployment-596f8dc867-dfvxl
+ADD new NodeResource: virtual-node-deployment-596f8dc867-fjcvq
+ADD new NodeResource: virtual-node-deployment-596f8dc867-g2t47
+2023/12/12 12:16:04 Scheduler receive -64- at -1702383364954
+2023/12/12 12:16:04 Scheduler receive -60- at -1702383364954
+2023/12/12 12:16:04 Scheduler receive -120- at -1702383364954
+2023/12/12 12:16:04 deploy -64-Func-64 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364954
+2023/12/12 12:16:04 Scheduler receive -156- at -1702383364954
+2023/12/12 12:16:04 Scheduler receive -116- at -1702383364955
+2023/12/12 12:16:04 Scheduler receive -196- at -1702383364954
+2023/12/12 12:16:04 Scheduler receive -160- at -1702383364955
+2023/12/12 12:16:04 Scheduler receive -168- at -1702383364957
+2023/12/12 12:16:04 Scheduler receive -48- at -1702383364957
+2023/12/12 12:16:04 Scheduler receive -140- at -1702383364957
+2023/12/12 12:16:04 Scheduler receive -4- at -1702383364957
+Cache miss!
+Cache hitted!
+2023/12/12 12:16:04 deploy -168-Func-168 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364959
+2023/12/12 12:16:04 deploy -48-Func-48 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364960
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -140-Func-140 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364960
+2023/12/12 12:16:04 deploy -4-Func-4 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364960
+Cache hitted!
+2023/12/12 12:16:04 deploy -160-Func-160 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364961
+Cache hitted!
+2023/12/12 12:16:04 deploy -116-Func-116 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364961
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -60-Func-60 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364962
+2023/12/12 12:16:04 deploy -196-Func-196 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364962
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -156-Func-156 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364962
+2023/12/12 12:16:04 deploy -120-Func-120 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364963
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -172- at -1702383364988
+2023/12/12 12:16:04 deploy -172-Func-172 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364988
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -124- at -1702383364988
+Cache hitted!
+2023/12/12 12:16:04 deploy -124-Func-124 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -32- at -1702383364988
+2023/12/12 12:16:04 deploy -32-Func-32 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364988
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -152- at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -184- at -1702383364988
+2023/12/12 12:16:04 deploy -152-Func-152 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364988
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -72- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -88- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -68- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -40- at -1702383364989
+2023/12/12 12:16:04 deploy -72-Func-72 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364989
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -112- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -108- at -1702383364989
+Cache hitted!
+2023/12/12 12:16:04 deploy -40-Func-40 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -128- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -176- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -76- at -1702383364989
+Cache hitted!
+2023/12/12 12:16:04 deploy -108-Func-108 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364990
+Cache hitted!
+2023/12/12 12:16:04 deploy -68-Func-68 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364990
+2023/12/12 12:16:04 deploy -176-Func-176 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364990
+Cache hitted!
+2023/12/12 12:16:04 deploy -128-Func-128 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364991
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -20- at -1702383364991
+2023/12/12 12:16:04 Scheduler receive -52- at -1702383364991
+2023/12/12 12:16:04 Scheduler receive -56- at -1702383364991
+2023/12/12 12:16:04 Scheduler receive -100- at -1702383364991
+2023/12/12 12:16:04 Scheduler receive -136- at -1702383364991
+Cache hitted!
+2023/12/12 12:16:04 deploy -20-Func-20 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364991
+2023/12/12 12:16:04 Scheduler receive -132- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -84- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -96- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -80- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -148- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -104- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -188- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -92- at -1702383364992
+Cache hitted!
+2023/12/12 12:16:04 deploy -132-Func-132 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -44- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -144- at -1702383364992
+Cache hitted!
+2023/12/12 12:16:04 deploy -84-Func-84 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364992
+Cache hitted!
+2023/12/12 12:16:04 deploy -92-Func-92 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364993
+2023/12/12 12:16:04 deploy -44-Func-44 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364993
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -188-Func-188 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364994
+2023/12/12 12:16:04 deploy -144-Func-144 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364994
+Cache hitted!
+2023/12/12 12:16:04 deploy -96-Func-96 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364994
+Cache hitted!
+2023/12/12 12:16:04 deploy -80-Func-80 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364995
+Cache hitted!
+2023/12/12 12:16:04 deploy -148-Func-148 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364996
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -104-Func-104 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364997
+2023/12/12 12:16:04 deploy -52-Func-52 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364998
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -136-Func-136 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364998
+2023/12/12 12:16:04 deploy -56-Func-56 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364998
+Cache hitted!
+2023/12/12 12:16:04 deploy -100-Func-100 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364998
+Cache hitted!
+2023/12/12 12:16:04 deploy -76-Func-76 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364999
+Cache hitted!
+2023/12/12 12:16:04 deploy -112-Func-112 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364999
+Cache hitted!
+2023/12/12 12:16:04 deploy -88-Func-88 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383364999
+Cache hitted!
+2023/12/12 12:16:05 deploy -184-Func-184 to node virtual-node-deployment-596f8dc867-g2t47 at -1702383365000
+Cache hitted!
+ADD new NodeResource: virtual-node-deployment-596f8dc867-dg2jv
+ADD new NodeResource: virtual-node-deployment-596f8dc867-x8449
+2023/12/12 12:16:04 Scheduler receive -65- at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -61- at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -197- at -1702383364956
+2023/12/12 12:16:04 deploy -65-Func-65 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -117- at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -121- at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -161- at -1702383364958
+2023/12/12 12:16:04 Scheduler receive -157- at -1702383364958
+2023/12/12 12:16:04 Scheduler receive -5- at -1702383364958
+2023/12/12 12:16:04 Scheduler receive -49- at -1702383364959
+Cache miss!
+2023/12/12 12:16:04 Scheduler receive -169- at -1702383364959
+2023/12/12 12:16:04 Scheduler receive -141- at -1702383364959
+2023/12/12 12:16:04 deploy -49-Func-49 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364961
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -169-Func-169 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364961
+Cache hitted!
+2023/12/12 12:16:04 deploy -141-Func-141 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364961
+Cache hitted!
+2023/12/12 12:16:04 deploy -161-Func-161 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364962
+2023/12/12 12:16:04 deploy -5-Func-5 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364962
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -157-Func-157 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364962
+Cache hitted!
+2023/12/12 12:16:04 deploy -197-Func-197 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364963
+Cache hitted!
+2023/12/12 12:16:04 deploy -61-Func-61 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364963
+Cache hitted!
+2023/12/12 12:16:04 deploy -117-Func-117 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364964
+2023/12/12 12:16:04 deploy -121-Func-121 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364964
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -173- at -1702383364988
+2023/12/12 12:16:04 deploy -173-Func-173 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -125- at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -33- at -1702383364989
+Cache hitted!
+2023/12/12 12:16:04 deploy -33-Func-33 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -153- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -185- at -1702383364989
+Cache hitted!
+2023/12/12 12:16:04 deploy -153-Func-153 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -73- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -89- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -69- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -41- at -1702383364989
+2023/12/12 12:16:04 deploy -185-Func-185 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364989
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -109- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -129- at -1702383364990
+2023/12/12 12:16:04 Scheduler receive -113- at -1702383364990
+2023/12/12 12:16:04 Scheduler receive -77- at -1702383364990
+Cache hitted!
+2023/12/12 12:16:04 deploy -129-Func-129 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364990
+2023/12/12 12:16:04 Scheduler receive -177- at -1702383364990
+2023/12/12 12:16:04 deploy -113-Func-113 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364990
+Cache hitted!
+2023/12/12 12:16:04 deploy -77-Func-77 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364991
+Cache hitted!
+2023/12/12 12:16:04 deploy -177-Func-177 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364991
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -73-Func-73 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364991
+2023/12/12 12:16:04 Scheduler receive -180- at -1702383364991
+2023/12/12 12:16:04 Scheduler receive -28- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -101- at -1702383364992
+Cache hitted!
+2023/12/12 12:16:04 deploy -28-Func-28 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -53- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -57- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -97- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -137- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -133- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -85- at -1702383364992
+2023/12/12 12:16:04 deploy -101-Func-101 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364992
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -105- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -149- at -1702383364992
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -93- at -1702383364992
+2023/12/12 12:16:04 deploy -53-Func-53 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -45- at -1702383364992
+2023/12/12 12:16:04 Scheduler receive -145- at -1702383364993
+2023/12/12 12:16:04 deploy -145-Func-145 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364993
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -81- at -1702383364993
+2023/12/12 12:16:04 deploy -81-Func-81 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364993
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -93-Func-93 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364993
+2023/12/12 12:16:04 deploy -45-Func-45 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364994
+Cache hitted!
+2023/12/12 12:16:04 deploy -57-Func-57 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364994
+Cache hitted!
+2023/12/12 12:16:04 deploy -105-Func-105 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364994
+Cache hitted!
+2023/12/12 12:16:04 deploy -97-Func-97 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364995
+Cache hitted!
+2023/12/12 12:16:04 deploy -137-Func-137 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364995
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -133-Func-133 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364995
+2023/12/12 12:16:04 deploy -85-Func-85 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364996
+Cache hitted!
+2023/12/12 12:16:04 deploy -149-Func-149 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364996
+Cache hitted!
+2023/12/12 12:16:04 deploy -180-Func-180 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364996
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -89-Func-89 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364997
+2023/12/12 12:16:04 deploy -69-Func-69 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364997
+Cache hitted!
+2023/12/12 12:16:04 deploy -109-Func-109 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364998
+Cache hitted!
+2023/12/12 12:16:04 deploy -41-Func-41 to node virtual-node-deployment-596f8dc867-x8449 at -1702383364999
+Cache hitted!
+2023/12/12 12:16:05 deploy -125-Func-125 to node virtual-node-deployment-596f8dc867-x8449 at -1702383365000
+Cache hitted!
+ADD new NodeResource: virtual-node-deployment-596f8dc867-kpq4q
+2023/12/12 12:16:05 Scheduler receive -11- at -1702383365009
+2023/12/12 12:16:05 deploy -11-Func-11 to node virtual-node-deployment-596f8dc867-kpq4q at -1702383365009
+Cache miss!
+2023/12/12 12:16:05 Scheduler receive -3- at -1702383365011
+2023/12/12 12:16:05 Scheduler receive -15- at -1702383365012
+2023/12/12 12:16:05 Scheduler receive -167- at -1702383365013
+2023/12/12 12:16:05 Scheduler receive -191- at -1702383365013
+2023/12/12 12:16:05 Scheduler receive -39- at -1702383365013
+2023/12/12 12:16:05 Scheduler receive -195- at -1702383365013
+2023/12/12 12:16:05 Scheduler receive -23- at -1702383365013
+2023/12/12 12:16:05 deploy -167-Func-167 to node virtual-node-deployment-596f8dc867-kpq4q at -1702383365014
+Cache hitted!
+2023/12/12 12:16:05 deploy -23-Func-23 to node virtual-node-deployment-596f8dc867-kpq4q at -1702383365014
+Cache hitted!
+2023/12/12 12:16:05 deploy -191-Func-191 to node virtual-node-deployment-596f8dc867-kpq4q at -1702383365014
+Cache hitted!
+2023/12/12 12:16:05 Scheduler receive -27- at -1702383365014
+2023/12/12 12:16:05 deploy -27-Func-27 to node virtual-node-deployment-596f8dc867-kpq4q at -1702383365015
+Cache hitted!
+2023/12/12 12:16:05 deploy -39-Func-39 to node virtual-node-deployment-596f8dc867-kpq4q at -1702383365015
+Cache hitted!
+2023/12/12 12:16:05 deploy -195-Func-195 to node virtual-node-deployment-596f8dc867-kpq4q at -1702383365015
+Cache hitted!
+2023/12/12 12:16:05 deploy -15-Func-15 to node virtual-node-deployment-596f8dc867-kpq4q at -1702383365016
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:05 deploy -3-Func-3 to node virtual-node-deployment-596f8dc867-kpq4q at -1702383365016
+2023/12/12 12:16:05 Scheduler receive -19- at -1702383365017
+2023/12/12 12:16:05 deploy -19-Func-19 to node virtual-node-deployment-596f8dc867-kpq4q at -1702383365017
+Cache hitted!
+ADD new NodeResource: virtual-node-deployment-596f8dc867-94xd8
+ADD new NodeResource: virtual-node-deployment-596f8dc867-ptkw8
+ADD new NodeResource: virtual-node-deployment-596f8dc867-vwh98
+ADD new NodeResource: virtual-node-deployment-596f8dc867-8xpvj
+ADD new NodeResource: virtual-node-deployment-596f8dc867-jtc7n
+ADD new NodeResource: virtual-node-deployment-596f8dc867-ctkck
+ADD new NodeResource: virtual-node-deployment-596f8dc867-87lnb
+ADD new NodeResource: virtual-node-deployment-596f8dc867-wbl7g
+2023/12/12 12:16:04 Scheduler receive -10- at -1702383364979
+2023/12/12 12:16:04 deploy -10-Func-10 to node virtual-node-deployment-596f8dc867-wbl7g at -1702383364980
+Cache miss!
+2023/12/12 12:16:04 Scheduler receive -2- at -1702383364982
+2023/12/12 12:16:04 Scheduler receive -183- at -1702383364982
+2023/12/12 12:16:04 deploy -2-Func-2 to node virtual-node-deployment-596f8dc867-wbl7g at -1702383364982
+Cache hitted!
+2023/12/12 12:16:04 deploy -183-Func-183 to node virtual-node-deployment-596f8dc867-wbl7g at -1702383364983
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -38- at -1702383364983
+2023/12/12 12:16:04 Scheduler receive -166- at -1702383364983
+2023/12/12 12:16:04 Scheduler receive -14- at -1702383364983
+2023/12/12 12:16:04 Scheduler receive -194- at -1702383364983
+2023/12/12 12:16:04 deploy -38-Func-38 to node virtual-node-deployment-596f8dc867-wbl7g at -1702383364983
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -14-Func-14 to node virtual-node-deployment-596f8dc867-wbl7g at -1702383364984
+2023/12/12 12:16:04 Scheduler receive -26- at -1702383364985
+2023/12/12 12:16:04 deploy -194-Func-194 to node virtual-node-deployment-596f8dc867-wbl7g at -1702383364985
+2023/12/12 12:16:04 Scheduler receive -31- at -1702383364985
+Cache hitted!
+2023/12/12 12:16:04 deploy -26-Func-26 to node virtual-node-deployment-596f8dc867-wbl7g at -1702383364986
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -18- at -1702383364987
+2023/12/12 12:16:04 deploy -18-Func-18 to node virtual-node-deployment-596f8dc867-wbl7g at -1702383364987
+Cache hitted!
+2023/12/12 12:16:04 deploy -31-Func-31 to node virtual-node-deployment-596f8dc867-wbl7g at -1702383364987
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -166-Func-166 to node virtual-node-deployment-596f8dc867-wbl7g at -1702383364987
+ADD new NodeResource: virtual-node-deployment-596f8dc867-d4g6b
+ADD new NodeResource: virtual-node-deployment-596f8dc867-bd46c
+ADD new NodeResource: virtual-node-deployment-596f8dc867-chszf
+ADD new NodeResource: virtual-node-deployment-596f8dc867-q8pkh
+ADD new NodeResource: virtual-node-deployment-596f8dc867-p9cd4
+ADD new NodeResource: virtual-node-deployment-596f8dc867-btfwq
+ADD new NodeResource: virtual-node-deployment-596f8dc867-4tlsz
+ADD new NodeResource: virtual-node-deployment-596f8dc867-cvq6n
+ADD new NodeResource: virtual-node-deployment-596f8dc867-ghlcw
+ADD new NodeResource: virtual-node-deployment-596f8dc867-slkjm
+ADD new NodeResource: virtual-node-deployment-596f8dc867-m9869
+ADD new NodeResource: virtual-node-deployment-596f8dc867-rfhwg
+ADD new NodeResource: virtual-node-deployment-596f8dc867-rpx5p
+ADD new NodeResource: virtual-node-deployment-596f8dc867-jh9jb
+ADD new NodeResource: virtual-node-deployment-596f8dc867-djpwt
+ADD new NodeResource: virtual-node-deployment-596f8dc867-zkqvp
+2023/12/12 12:16:04 Scheduler receive -63- at -1702383364953
+2023/12/12 12:16:04 Scheduler receive -119- at -1702383364953
+2023/12/12 12:16:04 Scheduler receive -67- at -1702383364953
+2023/12/12 12:16:04 deploy -63-Func-63 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364954
+2023/12/12 12:16:04 Scheduler receive -199- at -1702383364954
+2023/12/12 12:16:04 Scheduler receive -123- at -1702383364954
+Cache miss!
+2023/12/12 12:16:04 Scheduler receive -159- at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -51- at -1702383364956
+Cache hitted!
+2023/12/12 12:16:04 deploy -159-Func-159 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -7- at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -143- at -1702383364956
+2023/12/12 12:16:04 Scheduler receive -163- at -1702383364957
+2023/12/12 12:16:04 Scheduler receive -171- at -1702383364958
+Cache hitted!
+2023/12/12 12:16:04 deploy -171-Func-171 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364959
+2023/12/12 12:16:04 deploy -163-Func-163 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364959
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -51-Func-51 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364959
+Cache hitted!
+2023/12/12 12:16:04 deploy -143-Func-143 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364960
+2023/12/12 12:16:04 deploy -7-Func-7 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364960
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -123-Func-123 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364960
+Cache hitted!
+2023/12/12 12:16:04 deploy -199-Func-199 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364960
+2023/12/12 12:16:04 deploy -67-Func-67 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364961
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -119-Func-119 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364961
+2023/12/12 12:16:04 Scheduler receive -175- at -1702383364985
+Cache hitted!
+2023/12/12 12:16:04 deploy -175-Func-175 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364985
+2023/12/12 12:16:04 Scheduler receive -35- at -1702383364985
+2023/12/12 12:16:04 deploy -35-Func-35 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364985
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -155- at -1702383364985
+2023/12/12 12:16:04 Scheduler receive -127- at -1702383364985
+2023/12/12 12:16:04 deploy -155-Func-155 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364986
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -187- at -1702383364986
+2023/12/12 12:16:04 Scheduler receive -75- at -1702383364986
+2023/12/12 12:16:04 Scheduler receive -43- at -1702383364986
+2023/12/12 12:16:04 Scheduler receive -91- at -1702383364986
+2023/12/12 12:16:04 Scheduler receive -71- at -1702383364986
+2023/12/12 12:16:04 deploy -187-Func-187 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364986
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -131- at -1702383364986
+2023/12/12 12:16:04 Scheduler receive -79- at -1702383364986
+2023/12/12 12:16:04 Scheduler receive -111- at -1702383364986
+Cache hitted!
+2023/12/12 12:16:04 deploy -91-Func-91 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364986
+2023/12/12 12:16:04 Scheduler receive -115- at -1702383364987
+2023/12/12 12:16:04 deploy -115-Func-115 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364987
+2023/12/12 12:16:04 Scheduler receive -179- at -1702383364987
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -179-Func-179 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364987
+Cache hitted!
+2023/12/12 12:16:04 deploy -43-Func-43 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -181- at -1702383364988
+Cache hitted!
+2023/12/12 12:16:04 deploy -181-Func-181 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -189- at -1702383364988
+Cache hitted!
+2023/12/12 12:16:04 deploy -189-Func-189 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -103- at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -55- at -1702383364988
+2023/12/12 12:16:04 Scheduler receive -99- at -1702383364988
+Cache hitted!
+2023/12/12 12:16:04 Scheduler receive -59- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -135- at -1702383364989
+2023/12/12 12:16:04 deploy -59-Func-59 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -87- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -107- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -139- at -1702383364989
+Cache hitted!
+2023/12/12 12:16:04 deploy -135-Func-135 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -47- at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -95- at -1702383364989
+Cache hitted!
+2023/12/12 12:16:04 deploy -87-Func-87 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364989
+2023/12/12 12:16:04 Scheduler receive -151- at -1702383364990
+2023/12/12 12:16:04 Scheduler receive -147- at -1702383364990
+2023/12/12 12:16:04 Scheduler receive -83- at -1702383364990
+2023/12/12 12:16:04 deploy -151-Func-151 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364990
+Cache hitted!
+2023/12/12 12:16:04 deploy -83-Func-83 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364990
+Cache hitted!
+2023/12/12 12:16:04 deploy -147-Func-147 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364990
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -95-Func-95 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364990
+Cache hitted!
+2023/12/12 12:16:04 deploy -139-Func-139 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364991
+Cache hitted!
+2023/12/12 12:16:04 deploy -47-Func-47 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364991
+2023/12/12 12:16:04 deploy -107-Func-107 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364991
+Cache hitted!
+2023/12/12 12:16:04 deploy -99-Func-99 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364992
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -55-Func-55 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364993
+2023/12/12 12:16:04 deploy -103-Func-103 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364993
+Cache hitted!
+2023/12/12 12:16:04 deploy -131-Func-131 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364993
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -111-Func-111 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364993
+2023/12/12 12:16:04 deploy -71-Func-71 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364994
+Cache hitted!
+2023/12/12 12:16:04 deploy -79-Func-79 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364994
+Cache hitted!
+Cache hitted!
+2023/12/12 12:16:04 deploy -75-Func-75 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364994
+2023/12/12 12:16:04 deploy -127-Func-127 to node virtual-node-deployment-596f8dc867-zkqvp at -1702383364994
+Cache hitted!
+ADD new NodeResource: virtual-node-deployment-596f8dc867-sk8kr
+ADD new NodeResource: virtual-node-deployment-596f8dc867-pvzxx
+ADD new NodeResource: virtual-node-deployment-596f8dc867-fhlj9
+ADD new NodeResource: virtual-node-deployment-596f8dc867-98j9k

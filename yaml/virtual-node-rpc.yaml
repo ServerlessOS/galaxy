@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: virtual-node-deployment
+spec:
+  replicas: 70
+  selector:
+    matchLabels:
+      app: virtual-node
+  template:
+    metadata:
+      labels:
+        app: virtual-node
+    spec:
+      containers:
+        - name: virtual-node-rpc
+          image: bszpe/virtual-node-rpc:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: "4Gi"
+              cpu: "2"
+          ports:
+            - containerPort: 16446
+      nodeSelector:
+        virtual: dpu
