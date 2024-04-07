@@ -13,7 +13,7 @@ service funcManager {
 message GeneralRequest {
   int64 requestId = 1;
   string name = 2;
-  optional string labels = 3;
+  string labels = 3;
 }
 message RegisterReq{
   int64 requestId = 1;
@@ -23,7 +23,7 @@ message RegisterReq{
 }
 message CreateReq{
   GeneralRequest request = 1;
-  optional  string Annotations = 2;
+  string Annotations = 2;
   string Document = 3;
 }
 message DeleteReq {
