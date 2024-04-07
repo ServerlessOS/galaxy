@@ -6,7 +6,6 @@ import (
 )
 
 func main() {
-	command := cmd.NewGatewayCommand()
-	code := cmd.Run(command)
+	code := cmd.Run(cmd.Cmd)
 	os.Exit(code)
 }

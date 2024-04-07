@@ -4,43 +4,70 @@ import (
 	"context"
 	"fmt"
 	"func-manager/proto"
+	"math/rand/v2"
 	"net"
 	"os"
+	"strconv"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 )
 
+var (
+	localRpcAddr    string
+	coordinatorAddr string
+	funcManagerName string
+	funcYaml        map[string]*function //通过函数名索引函数，todo：考虑持久化
+)
+
+type function struct {
+	Name       string
+	Label      string
+	Annotation string
+	Document   string
+}
+
+var Cmd = &cobra.Command{
+	Use:   "gateway",
+	Short: `初始化gateway程序`,
+	//本函数用于执行命令并返回错误
+	RunE: func(cmd *cobra.Command, args []string) error {
+		funcManagerName = strconv.Itoa(int(rand.Uint32()))
+		var errChanRpc chan error
+		rpcServer(errChanRpc)
+		err := <-errChanRpc
+		if err != nil {
+			fmt.Printf("Error occurred: %v\n", err)
+			return err
+		}
+		return nil
+	},
+}
+
+func init() {
+	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", ":16449", "The addr used for binding to the RPC server. ")
+	Cmd.Flags().StringVarP(&coordinatorAddr, "coordinatorAddr", "c", "", "The addr used for connect to the coordinator. ")
+	log.SetFormatter(&log.TextFormatter{
+		DisableColors: false,
+		FullTimestamp: true,
+	})
+	log.SetOutput(os.Stdout)
+	log.SetLevel(log.InfoLevel)
+	log.SetReportCaller(true)
+}
+
+// Run 提供给顶层用于启动cobra根命令
 func Run(cmd *cobra.Command) (code int) {
 	err := cmd.Execute()
 	if err != nil {
+		log.Println(err)
 		os.Exit(1)
 	}
 	return 0
 }
 
-// todo:子命令、args解析、文档完善
-func NewGatewayCommand() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:  "gateway",
-		Long: ``,
-		RunE: func(cmd *cobra.Command, args []string) error {
-
-			return nil
-		},
-		Args: func(cmd *cobra.Command, args []string) error {
-			for _, arg := range args {
-				if len(arg) > 0 {
-					return fmt.Errorf("%q does not take any arguments, got %q", cmd.CommandPath(), args)
-				}
-			}
-			return nil
-		},
-	}
-	return cmd
-}
-
-func rpcServer(addr string, errChannel chan<- error) {
+func rpcServer(errChannel chan<- error) {
 	lis, err := net.Listen("tcp", "127.0.0.1:50051")
 	if err != nil {
 		errChannel <- err
@@ -49,7 +76,7 @@ func rpcServer(addr string, errChannel chan<- error) {
 	s := grpc.NewServer()
 
 	// 在gRPC服务器注册服务
-	proto.RegisterFuncMagagerServer(s, &rpcServerProcess{})
+	proto.RegisterFuncManagerServer(s, &rpcServerProcess{})
 
 	// 启动grpc服务
 	err = s.Serve(lis)
@@ -58,48 +85,38 @@ func rpcServer(addr string, errChannel chan<- error) {
 
 type rpcServerProcess struct{}
 
-// 实现Create接口
-func (s *rpcServerProcess) Create(ctx context.Context, req *proto.CreateReq) (*proto.GeneralResp, error) {
-	return &proto.GeneralResp{}, nil
+func (s *rpcServerProcess) Create(ctx context.Context, req *proto.CreateReq) (*proto.CreateResp, error) {
+	//todo：成熟时应该添加某种程度的校验和鉴权
+	newFunc := &function{
+		Name:       req.Request.Name,
+		Label:      req.Request.Labels,
+		Annotation: req.Annotations,
+		Document:   req.Document,
+	}
+	funcYaml[newFunc.Name] = newFunc
+	return &proto.CreateResp{
+		RequestId:        req.Request.RequestId,
+		StatusCode:       0,
+		Description:      "OK",
+		ErrorInformation: "",
+	}, nil
 }
 
-// 实现Register接口
-func (s *rpcServerProcess) Register(ctx context.Context, in *proto.RegisterReq) (*proto.GeneralResp, error) {
-	// 创建一个消息，设置Message字段，然后直接返回。
-	return &proto.GeneralResp{}, nil
-}
-
-// 实现Delete接口
-func (s *rpcServerProcess) Delete(ctx context.Context, req *proto.DeleteReq) (*proto.GeneralResp, error) {
-	return &proto.GeneralResp{}, nil
-}
-
-// 实现Get接口
 func (s *rpcServerProcess) Get(ctx context.Context, req *proto.GetReq) (*proto.GetResp, error) {
-	return &proto.GeneralResp{}, nil
+	//TODO implement me
+	panic("implement me")
+}
+func (s *rpcServerProcess) Delete(ctx context.Context, req *proto.DeleteReq) (*proto.DeleteResp, error) {
+	//TODO implement me
+	panic("implement me")
 }
 
-// 实现Describe接口
-func (s *rpcServerProcess) Describe(ctx context.Context, req *proto.DescribeReq) (*proto.DescribeResp, error) {
-	return &proto.GeneralResp{}, nil
+func (s *rpcServerProcess) List(ctx context.Context, req *proto.ListReq) (*proto.ListResp, error) {
+	//TODO implement me
+	panic("implement me")
 }
 
-// 实现Logs接口
-func (s *rpcServerProcess) Logs(ctx context.Context, req *proto.LogsReq) (*proto.LogsResp, error) {
-	return &proto.GeneralResp{}, nil
-}
-
-// 实现Version接口
-func (s *rpcServerProcess) Version(ctx context.Context, req *proto.VersionReq) (*proto.VersionResp, error) {
-	return &proto.GeneralResp{}, nil
-}
-
-// 实现Label接口
-func (s *rpcServerProcess) Label(ctx context.Context, req *proto.LabelReq) (*proto.GeneralResp, error) {
-	return &proto.GeneralResp{}, nil
-}
-
-// 实现Annotation接口
-func (s *rpcServerProcess) Annotation(ctx context.Context, req *proto.AnnotationReq) (*proto.GeneralResp, error) {
-	return &proto.GeneralResp{}, nil
+func (s *rpcServerProcess) RegisterGateway(ctx context.Context, req *proto.RegisterReq) (*proto.RegisterResp, error) {
+	//TODO implement me
+	panic("implement me")
 }

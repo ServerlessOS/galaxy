@@ -1,19 +1,19 @@
 syntax = "proto3";
-option go_package = "./;func-manager";
+option go_package = "./;funcManager";
 package funcManager;
 
 service funcManager {
   //可以添加apply便于批量化操作、auth提供权限管理能力
-//  rpc Create(CreateReq) returns(GeneralResp){}
-//  rpc Delete(DeleteReq)returns(GeneralResp){}
-//  rpc Label(ExpansionReq)returns(GeneralResp){}
-//  rpc Annotation(ExpansionReq)returns(GeneralResp){}
-//  rpc Get(GetReq) returns(GetResp){}
-//  rpc Describe(DescribeReq) returns(DescribeResp){}
-//  rpc Logs(LogsReq) returns(LogsResp){}
-//  rpc Version(VersionReq)returns(VersionResp){}
-  rpc userCommend(UserCommendRequest)returns(GeneralResp){}
-  rpc registerGateway(RegisterReq)returns(GeneralResp){}
+  rpc Create(CreateReq) returns(CreateResp){}             //添加函数
+  rpc Delete(DeleteReq)returns(DeleteResp){}              //删除函数
+  rpc Get(GetReq) returns(GetResp){}                       //给出函数名获取函数信息
+  rpc List(ListReq)returns(ListResp){}                 //查询有哪些函数
+  rpc registerGateway(RegisterReq)returns(RegisterResp){}   //向gateway注册，获取请求
+}
+message GeneralRequest {
+  int64 requestId = 1;
+  string name = 2;
+  optional string labels = 3;
 }
 message RegisterReq{
   int64 requestId = 1;
@@ -21,106 +21,46 @@ message RegisterReq{
   string address = 3;
   string port = 4;
 }
-message UserCommendRequest{
-  int64 requestId = 1;
-  string command = 2;
-}
 message CreateReq{
-  int64 RequestId = 1;
-  optional  string Type = 2;
-  string Name = 3;
-  optional  string Spec = 4;
-  optional string Labels = 5;
-  optional  string Annotations = 6;
-  optional  string specialInformation = 7;
+  GeneralRequest request = 1;
+  optional  string Annotations = 2;
+  string Document = 3;
 }
-message DeleteReq{
-  int64 requestId = 1;
-  optional string type = 2;
-  string name = 3;
-  optional string Labels = 4;
-  optional  string Annotations = 5;
-  optional  string specialInformation = 6;
+message DeleteReq {
+  GeneralRequest request = 1;
 }
-message GetReq{
+
+message GetReq {
+  GeneralRequest request = 1;
+}
+message ListReq{
   int64 requestId = 1;
-  optional string type = 2;
-  string name = 3;
-  optional string Labels = 4;
-  optional  string Annotations = 5;
-  optional  string specialInformation = 6;
 }
 message GetResp{
   int64 requestId = 1;
   int64 statusCode = 2;
-  string description = 3;
+  string Document = 3;
 }
-message DescribeReq{
-  int64 requestId = 1;
-  optional string type = 2;
-  string name = 3;
-  optional string Labels = 4;
-  optional  string Annotations = 5;
-  optional  string specialInformation = 6;
-}
-message DescribeResp{
+message CreateResp{
   int64 requestId = 1;
   int64 statusCode = 2;
   string description = 3;
+  string errorInformation = 4;
 }
-message LogsReq{
-  int64 requestId = 1;
-  optional string type = 2;
-  string name = 3;
-  optional string Labels = 4;
-  optional  string Annotations = 5;
-  optional  string specialInformation = 6;
-}
-message LogsResp{
+message DeleteResp{
   int64 requestId = 1;
   int64 statusCode = 2;
   string description = 3;
+  string errorInformation = 4;
 }
-message UnregisterReq{
-  int64 requestId = 1;
-  optional string type = 2;
-  string name = 3;
-  optional string Labels = 4;
-  optional  string Annotations = 5;
-  optional  string specialInformation = 6;
-}
-message VersionReq{
-  int64 requestId = 1;
-}
-message VersionResp{
+message RegisterResp{
   int64 requestId = 1;
   int64 statusCode = 2;
   string description = 3;
+  string errorInformation = 4;
 }
-message ExpansionReq{
-  enum ExpansionType {
-    dispatcher = 0;
-    scheduler = 1;
-    node = 2;
-  }
-
+message ListResp{
   int64 requestId = 1;
-  ExpansionType type = 2;
-  string specialInformation = 3;
-}
-message UpdateGatewayListReq {
-  enum OperationType {
-    APPEND = 0;
-    REDUCE = 1;
-    OVERRIDE = 2;
-  }
-
-  OperationType type = 1; // 操作类型 追加/减少/覆盖
-  map<string, string> gatewayList = 2;; // 网关列表
-}
-
-message GeneralResp{
-  int64 statusCode = 1;
-  string description = 2;
-  string errorInformation = 3;
+  int64 statusCode = 2;
+  string list = 3;  //yaml转字符串传输
 }
