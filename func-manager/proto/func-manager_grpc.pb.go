@@ -27,7 +27,6 @@ type FuncManagerClient interface {
 	Delete(ctx context.Context, in *DeleteReq, opts ...grpc.CallOption) (*DeleteResp, error)
 	Get(ctx context.Context, in *GetReq, opts ...grpc.CallOption) (*GetResp, error)
 	List(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*ListResp, error)
-	RegisterGateway(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 }
 
 type funcManagerClient struct {
@@ -74,15 +73,6 @@ func (c *funcManagerClient) List(ctx context.Context, in *ListReq, opts ...grpc.
 	return out, nil
 }
 
-func (c *funcManagerClient) RegisterGateway(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error) {
-	out := new(RegisterResp)
-	err := c.cc.Invoke(ctx, "/funcManager.funcManager/registerGateway", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // FuncManagerServer is the server API for FuncManager service.
 // All implementations should embed UnimplementedFuncManagerServer
 // for forward compatibility
@@ -92,7 +82,6 @@ type FuncManagerServer interface {
 	Delete(context.Context, *DeleteReq) (*DeleteResp, error)
 	Get(context.Context, *GetReq) (*GetResp, error)
 	List(context.Context, *ListReq) (*ListResp, error)
-	RegisterGateway(context.Context, *RegisterReq) (*RegisterResp, error)
 }
 
 // UnimplementedFuncManagerServer should be embedded to have forward compatible implementations.
@@ -110,9 +99,6 @@ func (UnimplementedFuncManagerServer) Get(context.Context, *GetReq) (*GetResp, e
 }
 func (UnimplementedFuncManagerServer) List(context.Context, *ListReq) (*ListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
-}
-func (UnimplementedFuncManagerServer) RegisterGateway(context.Context, *RegisterReq) (*RegisterResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RegisterGateway not implemented")
 }
 
 // UnsafeFuncManagerServer may be embedded to opt out of forward compatibility for this service.
@@ -198,24 +184,6 @@ func _FuncManager_List_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FuncManager_RegisterGateway_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegisterReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FuncManagerServer).RegisterGateway(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/funcManager.funcManager/registerGateway",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FuncManagerServer).RegisterGateway(ctx, req.(*RegisterReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // FuncManager_ServiceDesc is the grpc.ServiceDesc for FuncManager service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -238,10 +206,6 @@ var FuncManager_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _FuncManager_List_Handler,
-		},
-		{
-			MethodName: "registerGateway",
-			Handler:    _FuncManager_RegisterGateway_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

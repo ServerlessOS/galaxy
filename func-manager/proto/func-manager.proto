@@ -8,7 +8,6 @@ service funcManager {
   rpc Delete(DeleteReq)returns(DeleteResp){}              //删除函数
   rpc Get(GetReq) returns(GetResp){}                       //给出函数名获取函数信息
   rpc List(ListReq)returns(ListResp){}                 //查询有哪些函数
-  rpc registerGateway(RegisterReq)returns(RegisterResp){}   //向gateway注册，获取请求
 }
 message GeneralRequest {
   int64 requestId = 1;
@@ -48,12 +47,6 @@ message CreateResp{
   string errorInformation = 4;
 }
 message DeleteResp{
-  int64 requestId = 1;
-  int64 statusCode = 2;
-  string description = 3;
-  string errorInformation = 4;
-}
-message RegisterResp{
   int64 requestId = 1;
   int64 statusCode = 2;
   string description = 3;

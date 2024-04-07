@@ -4,6 +4,7 @@ package gateway_rpc;
 
 service Gateway {
   rpc UpdateGatewayList(UpdateGatewayListReq)returns(GeneralResp){}
+  //todo:gateway需要被注册以获取信息，至少包括funcManager和dispatcher，可以不包括scheduler和node
 }
 message UpdateGatewayListReq {
   enum OperationType {

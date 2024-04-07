@@ -4,14 +4,17 @@ import (
 	"context"
 	"fmt"
 	"func-manager/proto"
+	log "github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+	"golang.org/x/exp/maps"
+	"google.golang.org/grpc"
+	"gopkg.in/yaml.v3"
 	"math/rand/v2"
 	"net"
 	"os"
+	"os/signal"
 	"strconv"
-
-	log "github.com/sirupsen/logrus"
-	"github.com/spf13/cobra"
-	"google.golang.org/grpc"
+	"syscall"
 )
 
 var (
@@ -19,6 +22,7 @@ var (
 	coordinatorAddr string
 	funcManagerName string
 	funcYaml        map[string]*function //通过函数名索引函数，todo：考虑持久化
+	ExitCh          = make(chan int)
 )
 
 type function struct {
@@ -82,6 +86,23 @@ func rpcServer(errChannel chan<- error) {
 	err = s.Serve(lis)
 	errChannel <- err
 }
+func GracefulExit() {
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM, os.Kill)
+
+	sig := <-signalChan
+	log.Printf("catch signal, %+v", sig)
+
+	file, err := yaml.Marshal(funcYaml)
+	if err != nil {
+		log.Fatal("yaml conversion error")
+	}
+	if err := os.WriteFile("data.txt", file, 0644); err != nil {
+		log.Fatal("file save err:", err)
+	}
+	log.Printf("data persistence successful")
+	close(ExitCh)
+}
 
 type rpcServerProcess struct{}
 
@@ -103,20 +124,42 @@ func (s *rpcServerProcess) Create(ctx context.Context, req *proto.CreateReq) (*p
 }
 
 func (s *rpcServerProcess) Get(ctx context.Context, req *proto.GetReq) (*proto.GetResp, error) {
-	//TODO implement me
-	panic("implement me")
+	targetFunc, ok := funcYaml[req.Request.Name]
+	if !ok {
+		return nil, fmt.Errorf("functione not found")
+	}
+	return &proto.GetResp{
+		RequestId:  req.Request.RequestId,
+		StatusCode: 0,
+		Document:   targetFunc.Document,
+	}, nil
+
 }
 func (s *rpcServerProcess) Delete(ctx context.Context, req *proto.DeleteReq) (*proto.DeleteResp, error) {
-	//TODO implement me
-	panic("implement me")
+	_, ok := funcYaml[req.Request.Name]
+	if !ok {
+		return nil, fmt.Errorf("functione not found")
+	}
+	delete(funcYaml, req.Request.Name)
+	return &proto.DeleteResp{
+		RequestId:        req.Request.RequestId,
+		StatusCode:       0,
+		Description:      "OK",
+		ErrorInformation: "",
+	}, nil
 }
 
 func (s *rpcServerProcess) List(ctx context.Context, req *proto.ListReq) (*proto.ListResp, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s *rpcServerProcess) RegisterGateway(ctx context.Context, req *proto.RegisterReq) (*proto.RegisterResp, error) {
-	//TODO implement me
-	panic("implement me")
+	var funcName []string
+	funcName = maps.Keys(funcYaml)
+	yamlData, err := yaml.Marshal(funcName)
+	if err != nil {
+		log.Errorf("error: %v", err)
+		return nil, fmt.Errorf("yaml conversion error")
+	}
+	return &proto.ListResp{
+		RequestId:  req.RequestId,
+		StatusCode: 0,
+		List:       string(yamlData),
+	}, nil
 }
