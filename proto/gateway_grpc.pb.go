@@ -22,7 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GatewayClient interface {
-	UpdateGatewayList(ctx context.Context, in *UpdateGatewayListReq, opts ...grpc.CallOption) (*GeneralResp, error)
+	UpdateGatewayList(ctx context.Context, in *UpdateGatewayListReq, opts ...grpc.CallOption) (*UpdateGatewayListResp, error)
+	Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 }
 
 type gatewayClient struct {
@@ -33,9 +34,18 @@ func NewGatewayClient(cc grpc.ClientConnInterface) GatewayClient {
 	return &gatewayClient{cc}
 }
 
-func (c *gatewayClient) UpdateGatewayList(ctx context.Context, in *UpdateGatewayListReq, opts ...grpc.CallOption) (*GeneralResp, error) {
-	out := new(GeneralResp)
+func (c *gatewayClient) UpdateGatewayList(ctx context.Context, in *UpdateGatewayListReq, opts ...grpc.CallOption) (*UpdateGatewayListResp, error) {
+	out := new(UpdateGatewayListResp)
 	err := c.cc.Invoke(ctx, "/gateway_rpc.Gateway/UpdateGatewayList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gatewayClient) Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error) {
+	out := new(RegisterResp)
+	err := c.cc.Invoke(ctx, "/gateway_rpc.Gateway/Register", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,15 +56,19 @@ func (c *gatewayClient) UpdateGatewayList(ctx context.Context, in *UpdateGateway
 // All implementations should embed UnimplementedGatewayServer
 // for forward compatibility
 type GatewayServer interface {
-	UpdateGatewayList(context.Context, *UpdateGatewayListReq) (*GeneralResp, error)
+	UpdateGatewayList(context.Context, *UpdateGatewayListReq) (*UpdateGatewayListResp, error)
+	Register(context.Context, *RegisterReq) (*RegisterResp, error)
 }
 
 // UnimplementedGatewayServer should be embedded to have forward compatible implementations.
 type UnimplementedGatewayServer struct {
 }
 
-func (UnimplementedGatewayServer) UpdateGatewayList(context.Context, *UpdateGatewayListReq) (*GeneralResp, error) {
+func (UnimplementedGatewayServer) UpdateGatewayList(context.Context, *UpdateGatewayListReq) (*UpdateGatewayListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateGatewayList not implemented")
+}
+func (UnimplementedGatewayServer) Register(context.Context, *RegisterReq) (*RegisterResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
 
 // UnsafeGatewayServer may be embedded to opt out of forward compatibility for this service.
@@ -86,6 +100,24 @@ func _Gateway_UpdateGatewayList_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Gateway_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GatewayServer).Register(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gateway_rpc.Gateway/Register",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GatewayServer).Register(ctx, req.(*RegisterReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Gateway_ServiceDesc is the grpc.ServiceDesc for Gateway service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -96,6 +128,10 @@ var Gateway_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateGatewayList",
 			Handler:    _Gateway_UpdateGatewayList_Handler,
+		},
+		{
+			MethodName: "Register",
+			Handler:    _Gateway_Register_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

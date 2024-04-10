@@ -4,7 +4,7 @@
 // 	protoc        v3.11.2
 // source: proto/schedule.proto
 
-package coordinator_rpc
+package proto
 
 import (
 	context "context"

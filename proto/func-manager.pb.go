@@ -4,7 +4,7 @@
 // 	protoc        v4.25.3
 // source: func-manager.proto
 
-package proto
+package funcManager
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"

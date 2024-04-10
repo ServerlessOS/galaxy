@@ -4,7 +4,7 @@
 // 	protoc        v3.11.2
 // source: proto/dispatcher.proto
 
-package coordinator_rpc
+package proto
 
 import (
 	context "context"
