@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 	assignor "coordinator_rpc/RendezousHashing"
-	pb "coordinator_rpc/proto"
 	"fmt"
+	pb "github.com/ServerlessOS/galaxy/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/peer"
 	"log"
@@ -31,15 +31,15 @@ func (c CoordiantorServer) GatewayRegister(ctx context.Context, req *pb.GatewayR
 		return nil, fmt.Errorf("无法获取客户端IP地址")
 	}
 	IP := tcpAddr.IP.String()
-	Rh.Gateways[req.GatewayName]=&assignor.Gateway{
+	Rh.Gateways[req.GatewayName] = &assignor.Gateway{
 		Name: req.GatewayName,
 		Addr: IP,
 	}
-	dispatchers:=make([]*pb.GatewayRegisterResp_DispatcherInfo,0)
+	dispatchers := make([]*pb.GatewayRegisterResp_DispatcherInfo, 0)
 	for _, dispatcher := range Rh.Dispatchers {
-		dispatchers=append(dispatchers,&pb.GatewayRegisterResp_DispatcherInfo{Name: dispatcher.Name,Address: dispatcher.Addr})
+		dispatchers = append(dispatchers, &pb.GatewayRegisterResp_DispatcherInfo{Name: dispatcher.Name, Address: dispatcher.Addr})
 	}
-	return &pb.GatewayRegisterResp{Dispatchers: dispatchers},nil
+	return &pb.GatewayRegisterResp{Dispatchers: dispatchers}, nil
 }
 
 func (c CoordiantorServer) AddNodeInfo(ctx context.Context, update *pb.NodeInfoUpdate) (*pb.CoordinatorReply, error) {

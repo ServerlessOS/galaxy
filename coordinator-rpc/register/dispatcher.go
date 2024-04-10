@@ -5,8 +5,8 @@ import (
 	assignor "coordinator_rpc/RendezousHashing"
 	"coordinator_rpc/cmd"
 	"coordinator_rpc/constant"
-	pb "coordinator_rpc/proto"
 	"coordinator_rpc/server"
+	pb "github.com/ServerlessOS/galaxy/proto"
 	"log"
 	"time"
 )

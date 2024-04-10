@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	pb "coordinator_rpc/proto"
+	pb "github.com/ServerlessOS/galaxy/proto"
 	"time"
 
 	"google.golang.org/grpc"

@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 	"dispatcher_rpc/internal"
-	pb "dispatcher_rpc/proto"
 	"fmt"
+	pb "github.com/ServerlessOS/galaxy/proto"
 	"google.golang.org/grpc"
 	"log"
 	"net"

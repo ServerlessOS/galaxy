@@ -3,11 +3,11 @@ package server
 import (
 	"context"
 	"fmt"
+	pb "github.com/ServerlessOS/galaxy/proto"
 	"google.golang.org/grpc"
 	"log"
 	"scheduler_rpc/internal"
 	"scheduler_rpc/internal/cache"
-	pb "scheduler_rpc/proto"
 	"strings"
 	"time"
 )

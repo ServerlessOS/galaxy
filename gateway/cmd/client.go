@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"context"
-	gateway_rpc "gateway/proto"
+	gateway_rpc "github.com/ServerlessOS/galaxy/proto"
 	"google.golang.org/grpc"
 	"log"
 	"time"

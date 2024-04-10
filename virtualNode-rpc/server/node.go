@@ -3,13 +3,13 @@ package server
 import (
 	"context"
 	"fmt"
+	pb "github.com/ServerlessOS/galaxy/proto"
 	"google.golang.org/grpc"
 	"log"
 	"math/rand"
 	"net"
 	"time"
 	"virtualNode_rpc/internal"
-	pb "virtualNode_rpc/proto"
 )
 
 var (

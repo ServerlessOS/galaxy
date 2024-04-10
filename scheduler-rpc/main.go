@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
+	pb "github.com/ServerlessOS/galaxy/proto"
 	"google.golang.org/grpc"
 	"net"
-	pb "scheduler_rpc/proto"
 	"scheduler_rpc/server"
 )
 

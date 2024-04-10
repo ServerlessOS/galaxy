@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"context"
-	gateway_rpc "gateway/proto"
+	gateway_rpc "github.com/ServerlessOS/galaxy/proto"
 	log "github.com/sirupsen/logrus"
 	"math/rand"
 	"net"
@@ -95,9 +95,14 @@ func rpcServer(errChannel chan<- error) {
 
 type rpcServerProcess struct{}
 
-// 实现UpdateGatewayList接口
-func (s *rpcServerProcess) UpdateGatewayList(ctx context.Context, req *gateway_rpc.UpdateGatewayListReq) (*gateway_rpc.GeneralResp, error) {
-	return &gateway_rpc.GeneralResp{}, nil
+func (r rpcServerProcess) UpdateGatewayList(ctx context.Context, req *gateway_rpc.UpdateGatewayListReq) (*gateway_rpc.UpdateGatewayListResp, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (r rpcServerProcess) Register(ctx context.Context, req *gateway_rpc.RegisterReq) (*gateway_rpc.RegisterResp, error) {
+	//TODO implement me
+	panic("implement me")
 }
 
 func create(w http.ResponseWriter, req *http.Request) {

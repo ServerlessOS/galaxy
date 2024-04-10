@@ -1,8 +1,8 @@
 package RendezousHashing
 
 import (
-	pb "coordinator_rpc/proto"
 	"fmt"
+	pb "github.com/ServerlessOS/galaxy/proto"
 	"hash/fnv"
 )
 

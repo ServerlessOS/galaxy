@@ -3,7 +3,7 @@ package main
 //
 //import (
 //	"context"
-//	pb "dispatcher_rpc/proto"
+//	pb "github.com/ServerlessOS/galaxy/proto"
 //	"flag"
 //	"fmt"
 //	"google.golang.org/grpc"

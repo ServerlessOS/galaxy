@@ -4,12 +4,13 @@ import (
 	"bufio"
 	"context"
 	"coordiantor_test/informer"
-	pb "coordiantor_test/proto"
 	"fmt"
+	pb "github.com/ServerlessOS/galaxy/proto"
 	"google.golang.org/grpc"
 	"log"
 	"math/rand"
 	"os"
+
 	"strconv"
 
 	"sync"

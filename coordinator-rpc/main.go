@@ -2,9 +2,9 @@ package main
 
 import (
 	_ "coordinator_rpc/informer"
-	pb "coordinator_rpc/proto"
 	"coordinator_rpc/server"
 	"flag"
+	pb "github.com/ServerlessOS/galaxy/proto"
 	"net"
 
 	"google.golang.org/grpc"

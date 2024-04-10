@@ -3,7 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"func-manager/proto"
+	"github.com/ServerlessOS/galaxy/proto"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"golang.org/x/exp/maps"

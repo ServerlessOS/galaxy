@@ -7,7 +7,7 @@ package main
 //	"fmt"
 //	"google.golang.org/grpc"
 //	"log"
-//	pb "scheduler_rpc/proto"
+//	pb "github.com/ServerlessOS/galaxy/proto"
 //	"time"
 //)
 //

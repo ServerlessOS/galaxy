@@ -1,9 +1,9 @@
 package main
 
 import (
-	pb "dispatcher_rpc/proto"
 	"dispatcher_rpc/server"
 	"flag"
+	pb "github.com/ServerlessOS/galaxy/proto"
 	"google.golang.org/grpc"
 	"net"
 )
