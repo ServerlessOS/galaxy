@@ -1,4 +1,4 @@
-module proto
+module github.com/ServerlessOS/galaxy/proto
 
 go 1.22
 
