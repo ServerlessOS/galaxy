@@ -4,7 +4,7 @@
 // - protoc             v4.25.3
 // source: gateway.proto
 
-package gateway_rpc
+package proto
 
 import (
 	context "context"

@@ -1,5 +1,5 @@
 syntax = "proto3";
-option go_package = "./;funcManager";
+option go_package = "./;proto";
 package funcManager;
 
 service funcManager {
@@ -13,12 +13,6 @@ message GeneralRequest {
   int64 requestId = 1;
   string name = 2;
   string labels = 3;
-}
-message RegisterReq{
-  int64 requestId = 1;
-  string name = 2;
-  string address = 3;
-  string port = 4;
 }
 message CreateReq{
   GeneralRequest request = 1;

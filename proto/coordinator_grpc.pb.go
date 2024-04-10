@@ -4,7 +4,7 @@
 // - protoc             v4.25.3
 // source: coordinator.proto
 
-package coordinator_rpc
+package proto
 
 import (
 	context "context"

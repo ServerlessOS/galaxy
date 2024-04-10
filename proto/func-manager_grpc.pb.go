@@ -4,7 +4,7 @@
 // - protoc             v4.25.3
 // source: func-manager.proto
 
-package funcManager
+package proto
 
 import (
 	context "context"

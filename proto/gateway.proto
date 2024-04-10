@@ -1,5 +1,5 @@
 syntax = "proto3";
-option go_package = "./;gateway_rpc";
+option go_package = "./;proto";
 package gateway_rpc;
 
 service Gateway {

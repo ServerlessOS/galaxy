@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "./;coordinator_rpc";
+option go_package = "./;proto";
 package dispatcher;
 
 // 1. 请求分发
