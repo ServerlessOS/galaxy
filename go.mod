@@ -1,3 +1,3 @@
-module serverless-control-plane
+module github.com/ServerlessOS/galaxy
 
 go 1.22
