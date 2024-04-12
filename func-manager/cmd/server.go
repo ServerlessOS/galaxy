@@ -120,6 +120,7 @@ func init() {
 			}
 		}
 	}
+	log.Println("Init func-manager success.")
 }
 
 // Run 提供给顶层用于启动cobra根命令
