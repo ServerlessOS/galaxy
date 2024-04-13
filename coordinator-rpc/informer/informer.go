@@ -1,7 +1,7 @@
 package informer
 
 import (
-	"coordinator_rpc/register"
+	"coordinator_rpc/registerForK8s"
 	"flag"
 	"fmt"
 	"strings"
@@ -14,10 +14,13 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-var Kubeconfig = flag.String("kubeconfig", "config", "absolute path to the kubeconfig file")
+var Kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
 
 func init() {
 	flag.Parse()
+	if *Kubeconfig == "" {
+		return
+	}
 	config, err := clientcmd.BuildConfigFromFlags("", *Kubeconfig)
 	if err != nil {
 		panic(err.Error())
@@ -29,20 +32,20 @@ func init() {
 	podInformer := factory.Core().V1().Pods().Informer()
 	podInformer.AddEventHandler(cache.ResourceEventHandlerFuncs{
 		AddFunc: func(obj interface{}) {
-			module := new(register.RootModule)
+			module := new(registerForK8s.RootModule)
 			module.SetPod(obj.(*v1.Pod))
 			switch {
 			case strings.Contains(module.Pod.Name, "virtual-node-deployment"):
-				fmt.Println("register node")
-				node := &register.Node{*module}
+				fmt.Println("registerForK8s node")
+				node := &registerForK8s.Node{*module}
 				node.Register()
 			case strings.Contains(module.Pod.Name, "scheduler-deployment"):
-				fmt.Println("register scheduler")
-				scheduler := &register.Scheduler{*module}
+				fmt.Println("registerForK8s scheduler")
+				scheduler := &registerForK8s.Scheduler{*module}
 				scheduler.Register()
 			case strings.Contains(module.Pod.Name, "dispatcher-deployment"):
-				fmt.Println("register dispatcher")
-				dispatcher := &register.Dispatcher{*module}
+				fmt.Println("registerForK8s dispatcher")
+				dispatcher := &registerForK8s.Dispatcher{*module}
 				dispatcher.Register()
 			}
 		},

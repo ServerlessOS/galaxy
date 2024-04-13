@@ -1,4 +1,4 @@
-package register
+package registerForK8s
 
 import (
 	"context"
@@ -12,6 +12,7 @@ import (
 )
 
 type Dispatcher struct {
+	RootModule
 }
 
 func (d *Dispatcher) Register() {

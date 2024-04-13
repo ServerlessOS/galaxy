@@ -1,4 +1,4 @@
-package register
+package registerForK8s
 
 import v1 "k8s.io/api/core/v1"
 

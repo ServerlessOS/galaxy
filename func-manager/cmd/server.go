@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"github.com/ServerlessOS/galaxy/constant"
 	"github.com/ServerlessOS/galaxy/proto"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -17,11 +19,12 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+	"time"
 )
 
 var (
 	localRpcAddr    string
-	coordinatorAddr string
+	gatewayAddr     string
 	funcManagerName string
 	funcYaml        = make(map[string]*function) //通过函数名索引函数
 	ExitCh          = make(chan int)
@@ -42,8 +45,26 @@ var Cmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		funcManagerName = strconv.Itoa(int(rand.Uint32()))
 		var errChanRpc chan error
+		//向gateway注册
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+		defer cancel()
+		connGateway, err := grpc.Dial(gatewayAddr, grpc.WithInsecure(), grpc.WithTimeout(time.Second*3))
+		if err != nil {
+			log.Fatalln("dial gateway error:", err)
+		}
+		client := proto.NewGatewayClient(connGateway)
+		client.Register(ctx, &proto.RegisterReq{
+			Type:    1, //    coordinator = 0; funcManager = 1;
+			Name:    funcManagerName,
+			Address: "",
+		})
+
+		if !cmd.Flags().Changed("gatewayAddr") {
+			return errors.New("gatewayAddr is required")
+		}
+
 		rpcServer(errChanRpc)
-		err := <-errChanRpc
+		err = <-errChanRpc
 		if err != nil {
 			fmt.Printf("Error occurred: %v\n", err)
 			return err
@@ -53,8 +74,8 @@ var Cmd = &cobra.Command{
 }
 
 func init() {
-	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", ":16449", "The addr used for binding to the RPC server. ")
-	Cmd.Flags().StringVarP(&coordinatorAddr, "coordinatorAddr", "c", "", "The addr used for connect to the coordinator. ")
+	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", ":"+constant.FuncManagerPort, "The addr used for binding to the RPC server. ")
+	Cmd.Flags().StringVarP(&gatewayAddr, "gatewayAddr", "g", "", "The address information of the gateway needs to be registered with the gateway to work properly. ")
 	log.SetFormatter(&log.TextFormatter{
 		DisableColors: false,
 		FullTimestamp: true,
@@ -134,7 +155,7 @@ func Run(cmd *cobra.Command) (code int) {
 }
 
 func rpcServer(errChannel chan<- error) {
-	lis, err := net.Listen("tcp", "127.0.0.1:50051")
+	lis, err := net.Listen("tcp", localRpcAddr)
 	if err != nil {
 		errChannel <- err
 	}

@@ -1,4 +1,4 @@
-package register
+package registerForK8s
 
 import (
 	"context"
@@ -16,6 +16,7 @@ var (
 )
 
 type Node struct {
+	RootModule
 }
 
 func (n *Node) Register() {

@@ -18,16 +18,19 @@ message UpdateGatewayListReq {
 }
 message RegisterReq{
   enum RegisterType {
-    coordinator = 0;
+    gateway = 0;
     funcManager = 1;
+    dispatcher  = 3;
+    scheduler  = 4;
+    node  = 5;
   }
   RegisterType type = 1;
   string name = 2;
-  string address = 3;
+  string address = 3;//当模块联系gateway时，地址可以为空也可以存在，当gateway转发顶层控制器时，自动填充地址
 }
 message RegisterResp{
   int64 statusCode = 1;
-  string description = 2;
+  string customInformation = 2; //不同的注册可以返回不同的信息
 }
 message UpdateGatewayListResp{
   int64 statusCode = 1;
