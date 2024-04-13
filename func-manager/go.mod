@@ -3,7 +3,7 @@ module func-manager
 go 1.22.0
 
 require (
-	github.com/ServerlessOS/galaxy v0.0.0-20240410165040-11bd7074d95b
+	github.com/ServerlessOS/galaxy v0.0.0-20240413144541-f978a7b30efb
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.0
 	golang.org/x/exp v0.0.0-20240404231335-c0f41cb1a7a0

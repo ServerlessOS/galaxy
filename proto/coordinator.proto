@@ -3,26 +3,17 @@ syntax = "proto3";
 option go_package = "./;proto";
 package dispatcher;
 
+import "gateway.proto";
 // 1. 请求分发
 // 2. 调用扩容请求
 // 3. 更新调度器视图
 service coordinator {
-  rpc AddNodeInfo(NodeInfoUpdate) returns (CoordinatorReply){}
-  rpc AddSchedulerInfo(SchedulerInfoUpdate) returns (CoordinatorReply){}
-  rpc AddDispatcherInfo(DispatcherInfoUpdate) returns (CoordinatorReply){}
-  rpc GatewayRegister(GatewayRegisterReq)returns(GatewayRegisterResp){}
+  rpc AddNodeInfo(NodeInfoUpdate) returns (CoordinatorReply){}            //历史遗迹，由register包含其全部功能
+  rpc AddSchedulerInfo(SchedulerInfoUpdate) returns (CoordinatorReply){}  //历史遗迹，由register包含其全部功能
+  rpc AddDispatcherInfo(DispatcherInfoUpdate) returns (CoordinatorReply){}//历史遗迹，由register包含其全部功能
+  rpc Register(gateway_rpc.RegisterReq)returns(gateway_rpc.RegisterResp){}
 }
-message GatewayRegisterReq{//由服务端直接解析客户端ip
-  string GatewayName=1;
-}
-message GatewayRegisterResp {
-  repeated DispatcherInfo dispatchers = 1;
 
-  message DispatcherInfo {
-    string name = 1;
-    string address = 2;
-  }
-}
 message NodeInfoUpdate{
   string NodeName = 1;
   string Address = 2;

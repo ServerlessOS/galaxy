@@ -25,7 +25,7 @@ type CoordinatorClient interface {
 	AddNodeInfo(ctx context.Context, in *NodeInfoUpdate, opts ...grpc.CallOption) (*CoordinatorReply, error)
 	AddSchedulerInfo(ctx context.Context, in *SchedulerInfoUpdate, opts ...grpc.CallOption) (*CoordinatorReply, error)
 	AddDispatcherInfo(ctx context.Context, in *DispatcherInfoUpdate, opts ...grpc.CallOption) (*CoordinatorReply, error)
-	GatewayRegister(ctx context.Context, in *GatewayRegisterReq, opts ...grpc.CallOption) (*GatewayRegisterResp, error)
+	Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 }
 
 type coordinatorClient struct {
@@ -63,9 +63,9 @@ func (c *coordinatorClient) AddDispatcherInfo(ctx context.Context, in *Dispatche
 	return out, nil
 }
 
-func (c *coordinatorClient) GatewayRegister(ctx context.Context, in *GatewayRegisterReq, opts ...grpc.CallOption) (*GatewayRegisterResp, error) {
-	out := new(GatewayRegisterResp)
-	err := c.cc.Invoke(ctx, "/dispatcher.coordinator/GatewayRegister", in, out, opts...)
+func (c *coordinatorClient) Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error) {
+	out := new(RegisterResp)
+	err := c.cc.Invoke(ctx, "/dispatcher.coordinator/Register", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ type CoordinatorServer interface {
 	AddNodeInfo(context.Context, *NodeInfoUpdate) (*CoordinatorReply, error)
 	AddSchedulerInfo(context.Context, *SchedulerInfoUpdate) (*CoordinatorReply, error)
 	AddDispatcherInfo(context.Context, *DispatcherInfoUpdate) (*CoordinatorReply, error)
-	GatewayRegister(context.Context, *GatewayRegisterReq) (*GatewayRegisterResp, error)
+	Register(context.Context, *RegisterReq) (*RegisterResp, error)
 }
 
 // UnimplementedCoordinatorServer should be embedded to have forward compatible implementations.
@@ -95,8 +95,8 @@ func (UnimplementedCoordinatorServer) AddSchedulerInfo(context.Context, *Schedul
 func (UnimplementedCoordinatorServer) AddDispatcherInfo(context.Context, *DispatcherInfoUpdate) (*CoordinatorReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddDispatcherInfo not implemented")
 }
-func (UnimplementedCoordinatorServer) GatewayRegister(context.Context, *GatewayRegisterReq) (*GatewayRegisterResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GatewayRegister not implemented")
+func (UnimplementedCoordinatorServer) Register(context.Context, *RegisterReq) (*RegisterResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
 
 // UnsafeCoordinatorServer may be embedded to opt out of forward compatibility for this service.
@@ -164,20 +164,20 @@ func _Coordinator_AddDispatcherInfo_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Coordinator_GatewayRegister_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GatewayRegisterReq)
+func _Coordinator_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CoordinatorServer).GatewayRegister(ctx, in)
+		return srv.(CoordinatorServer).Register(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/dispatcher.coordinator/GatewayRegister",
+		FullMethod: "/dispatcher.coordinator/Register",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CoordinatorServer).GatewayRegister(ctx, req.(*GatewayRegisterReq))
+		return srv.(CoordinatorServer).Register(ctx, req.(*RegisterReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -202,8 +202,8 @@ var Coordinator_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Coordinator_AddDispatcherInfo_Handler,
 		},
 		{
-			MethodName: "GatewayRegister",
-			Handler:    _Coordinator_GatewayRegister_Handler,
+			MethodName: "Register",
+			Handler:    _Coordinator_Register_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

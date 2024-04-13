@@ -22,7 +22,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GatewayClient interface {
-	UpdateGatewayList(ctx context.Context, in *UpdateGatewayListReq, opts ...grpc.CallOption) (*UpdateGatewayListResp, error)
+	UpdateGatewayList(ctx context.Context, in *UpdateListReq, opts ...grpc.CallOption) (*UpdateListResp, error)
+	UpdateDispatcherList(ctx context.Context, in *UpdateListReq, opts ...grpc.CallOption) (*UpdateListResp, error)
+	UpdateFuncManagerList(ctx context.Context, in *UpdateListReq, opts ...grpc.CallOption) (*UpdateListResp, error)
 	Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 }
 
@@ -34,9 +36,27 @@ func NewGatewayClient(cc grpc.ClientConnInterface) GatewayClient {
 	return &gatewayClient{cc}
 }
 
-func (c *gatewayClient) UpdateGatewayList(ctx context.Context, in *UpdateGatewayListReq, opts ...grpc.CallOption) (*UpdateGatewayListResp, error) {
-	out := new(UpdateGatewayListResp)
+func (c *gatewayClient) UpdateGatewayList(ctx context.Context, in *UpdateListReq, opts ...grpc.CallOption) (*UpdateListResp, error) {
+	out := new(UpdateListResp)
 	err := c.cc.Invoke(ctx, "/gateway_rpc.Gateway/UpdateGatewayList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gatewayClient) UpdateDispatcherList(ctx context.Context, in *UpdateListReq, opts ...grpc.CallOption) (*UpdateListResp, error) {
+	out := new(UpdateListResp)
+	err := c.cc.Invoke(ctx, "/gateway_rpc.Gateway/UpdateDispatcherList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gatewayClient) UpdateFuncManagerList(ctx context.Context, in *UpdateListReq, opts ...grpc.CallOption) (*UpdateListResp, error) {
+	out := new(UpdateListResp)
+	err := c.cc.Invoke(ctx, "/gateway_rpc.Gateway/UpdateFuncManagerList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +76,9 @@ func (c *gatewayClient) Register(ctx context.Context, in *RegisterReq, opts ...g
 // All implementations should embed UnimplementedGatewayServer
 // for forward compatibility
 type GatewayServer interface {
-	UpdateGatewayList(context.Context, *UpdateGatewayListReq) (*UpdateGatewayListResp, error)
+	UpdateGatewayList(context.Context, *UpdateListReq) (*UpdateListResp, error)
+	UpdateDispatcherList(context.Context, *UpdateListReq) (*UpdateListResp, error)
+	UpdateFuncManagerList(context.Context, *UpdateListReq) (*UpdateListResp, error)
 	Register(context.Context, *RegisterReq) (*RegisterResp, error)
 }
 
@@ -64,8 +86,14 @@ type GatewayServer interface {
 type UnimplementedGatewayServer struct {
 }
 
-func (UnimplementedGatewayServer) UpdateGatewayList(context.Context, *UpdateGatewayListReq) (*UpdateGatewayListResp, error) {
+func (UnimplementedGatewayServer) UpdateGatewayList(context.Context, *UpdateListReq) (*UpdateListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateGatewayList not implemented")
+}
+func (UnimplementedGatewayServer) UpdateDispatcherList(context.Context, *UpdateListReq) (*UpdateListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateDispatcherList not implemented")
+}
+func (UnimplementedGatewayServer) UpdateFuncManagerList(context.Context, *UpdateListReq) (*UpdateListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateFuncManagerList not implemented")
 }
 func (UnimplementedGatewayServer) Register(context.Context, *RegisterReq) (*RegisterResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
@@ -83,7 +111,7 @@ func RegisterGatewayServer(s grpc.ServiceRegistrar, srv GatewayServer) {
 }
 
 func _Gateway_UpdateGatewayList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateGatewayListReq)
+	in := new(UpdateListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -95,7 +123,43 @@ func _Gateway_UpdateGatewayList_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: "/gateway_rpc.Gateway/UpdateGatewayList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GatewayServer).UpdateGatewayList(ctx, req.(*UpdateGatewayListReq))
+		return srv.(GatewayServer).UpdateGatewayList(ctx, req.(*UpdateListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Gateway_UpdateDispatcherList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GatewayServer).UpdateDispatcherList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gateway_rpc.Gateway/UpdateDispatcherList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GatewayServer).UpdateDispatcherList(ctx, req.(*UpdateListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Gateway_UpdateFuncManagerList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GatewayServer).UpdateFuncManagerList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gateway_rpc.Gateway/UpdateFuncManagerList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GatewayServer).UpdateFuncManagerList(ctx, req.(*UpdateListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,6 +192,14 @@ var Gateway_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateGatewayList",
 			Handler:    _Gateway_UpdateGatewayList_Handler,
+		},
+		{
+			MethodName: "UpdateDispatcherList",
+			Handler:    _Gateway_UpdateDispatcherList_Handler,
+		},
+		{
+			MethodName: "UpdateFuncManagerList",
+			Handler:    _Gateway_UpdateFuncManagerList_Handler,
 		},
 		{
 			MethodName: "Register",
