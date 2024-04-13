@@ -52,17 +52,36 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 		//    APPEND = 0;
 		//    REDUCE = 1;
 		//    OVERRIDE = 2;
-		Type: 0,
+		Type: 2,
 		List: AllgatewayList,
 	})
+	if resp.StatusCode != 0 || err != nil {
+		log.Println("UpdateGatewayList err:", err)
+	}
 	//dispatcher
 	AllDispatcherList := make(map[string]string)
-	for n, v := range server.Rh.Dispatchers {
+	for _, v := range server.Rh.Dispatchers {
 		AllDispatcherList[v.Name] = v.Addr
 	}
-	resp, err := client.GetGatewayClient(name).UpdateDispatcherList(ctx, &pb.UpdateListReq{
+	resp, err = client.GetGatewayClient(name).UpdateDispatcherList(ctx, &pb.UpdateListReq{
 		Type: 2,
 		List: AllDispatcherList,
 	})
-	log.Printf("registerForK8s dispatcher, name:%v,state:%s", name, resp.State)
+	if resp.StatusCode != 0 || err != nil {
+		log.Println("UpdateDispatcherList err:", err)
+	}
+	//funcManager
+	AllFuncManagerList := make(map[string]string)
+	for _, v := range server.Rh.FuncManagers {
+		AllFuncManagerList[v.Name] = v.Addr
+	}
+	resp, err = client.GetGatewayClient(name).UpdateFuncManagerList(ctx, &pb.UpdateListReq{
+		Type: 2,
+		List: AllFuncManagerList,
+	})
+	if resp.StatusCode != 0 || err != nil {
+		log.Println("UpdateFuncManagerList err:", err)
+	}
+	log.Printf("register gateway, name:%v", name)
+	return nil
 }
