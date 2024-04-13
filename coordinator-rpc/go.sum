@@ -2,6 +2,8 @@ github.com/ServerlessOS/galaxy v0.0.0-20240410165040-11bd7074d95b h1:VRRtzrCFG4n
 github.com/ServerlessOS/galaxy v0.0.0-20240410165040-11bd7074d95b/go.mod h1:1iV/+ZmghzFJ0NsSn2PK8RNQPf+RBRvDugXT31JeWQ0=
 github.com/ServerlessOS/galaxy v0.0.0-20240413144541-f978a7b30efb h1:qshVyLAvgDqwTFRBVqXNvIsdhlHYKbbIHeiwSBR6+cE=
 github.com/ServerlessOS/galaxy v0.0.0-20240413144541-f978a7b30efb/go.mod h1:1iV/+ZmghzFJ0NsSn2PK8RNQPf+RBRvDugXT31JeWQ0=
+github.com/ServerlessOS/galaxy v0.0.0-20240413174141-161609f45f1d h1:1C8rnjdO3siEpFKh36eurMrhN4ipU8p7yQ+N+esW9O4=
+github.com/ServerlessOS/galaxy v0.0.0-20240413174141-161609f45f1d/go.mod h1:1iV/+ZmghzFJ0NsSn2PK8RNQPf+RBRvDugXT31JeWQ0=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

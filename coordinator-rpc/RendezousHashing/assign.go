@@ -40,6 +40,10 @@ type Gateway struct {
 	Name string
 	Addr string
 }
+type FuncManager struct {
+	Name string
+	Addr string
+}
 
 func NewScheduler(name string, addr string) *Scheduler {
 	return &Scheduler{Name: name, Addr: addr}
@@ -47,22 +51,24 @@ func NewScheduler(name string, addr string) *Scheduler {
 
 // RendezvousHashing implements the Rendezvous Hashing algorithm
 type RendezvousHashing struct {
-	Nodes       map[string]*NodeResource
-	Schedulers  map[string]*Scheduler
-	Dispatchers map[string]*Dispatcher
-	Gateways    map[string]*Gateway
-	SNView      map[string]string // node -> scheduler
-	Hash        HashFunc
+	Nodes        map[string]*NodeResource
+	Schedulers   map[string]*Scheduler
+	Dispatchers  map[string]*Dispatcher
+	Gateways     map[string]*Gateway
+	FuncManagers map[string]*FuncManager
+	SNView       map[string]string // node -> scheduler
+	Hash         HashFunc
 }
 
 func NewRendezvousHashing() *RendezvousHashing {
 	return &RendezvousHashing{
-		Nodes:       make(map[string]*NodeResource),
-		Schedulers:  make(map[string]*Scheduler),
-		Dispatchers: make(map[string]*Dispatcher),
-		Gateways:    make(map[string]*Gateway),
-		SNView:      make(map[string]string),
-		Hash:        FnvHash,
+		Nodes:        make(map[string]*NodeResource),
+		Schedulers:   make(map[string]*Scheduler),
+		Dispatchers:  make(map[string]*Dispatcher),
+		Gateways:     make(map[string]*Gateway),
+		FuncManagers: make(map[string]*FuncManager),
+		SNView:       make(map[string]string),
+		Hash:         FnvHash,
 	}
 }
 func (rh *RendezvousHashing) Statisics() {

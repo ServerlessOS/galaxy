@@ -3,8 +3,9 @@ package register
 import (
 	"context"
 	assignor "coordinator_rpc/RendezousHashing"
-	"coordinator_rpc/cmd"
+	"coordinator_rpc/client"
 	"coordinator_rpc/server"
+
 	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
 	"log"
@@ -50,7 +51,7 @@ func (n *Node) Register() {
 	server.Rh.Nodes[node.NodeName] = node
 	server.Rh.SNView[node.NodeName] = selectedScheduler.Name
 
-	sClient := cmd.GetSchedulerClient(selectedScheduler.Name)
+	sClient := client.GetSchedulerClient(selectedScheduler.Name)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()

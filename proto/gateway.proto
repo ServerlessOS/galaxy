@@ -16,15 +16,15 @@ message UpdateListReq {
   }
 
   OperationType type = 1; // 操作类型 追加/减少/覆盖
-  map<string, string> gatewayList = 2;; // 列表name/address
+  map<string, string> list = 2;; // 列表name/address
 }
 message RegisterReq{
   enum RegisterType {
     gateway = 0;
     funcManager = 1;
-    dispatcher  = 3;
-    scheduler  = 4;
-    node  = 5;
+    dispatcher  = 2;
+    scheduler  = 3;
+    node  = 4;
   }
   RegisterType type = 1;
   string name = 2;

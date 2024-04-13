@@ -3,7 +3,7 @@ package registerForK8s
 import (
 	"context"
 	assignor "coordinator_rpc/RendezousHashing"
-	"coordinator_rpc/cmd"
+	"coordinator_rpc/client"
 	"coordinator_rpc/server"
 	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
@@ -25,7 +25,7 @@ func (s *Scheduler) Register() {
 	sch := assignor.NewScheduler(s.Pod.Name, s.getPodIP())
 	server.Rh.Schedulers[sch.Name] = sch
 	SchedulerList = append(SchedulerList, sch.ToProto())
-	cmd.DialSchedulerClient(sch.Name, sch.Addr+":"+constant.SchedulerPort)
+	client.DialSchedulerClient(sch.Name, sch.Addr+":"+constant.SchedulerPort)
 	for nodeName, nodeResource := range server.Rh.Nodes {
 		hash := server.Rh.Hash(sch.Name + nodeName)
 		if hash > nodeResource.Hash {
@@ -37,7 +37,7 @@ func (s *Scheduler) Register() {
 				SourceAddr: oldScheduler.Addr,
 				TargetAddr: sch.Addr,
 			}
-			client := cmd.GetSchedulerClient(oldScheduler.Name)
+			client := client.GetSchedulerClient(oldScheduler.Name)
 			resp, err := client.UpadateNodeResource(ctx, req)
 			if resp.State != 0 || err != nil {
 				panic(err)
@@ -47,7 +47,7 @@ func (s *Scheduler) Register() {
 		}
 	}
 	//通知上游的dispatcher
-	dClientList := cmd.GetDispatcherClientList()
+	dClientList := client.GetDispatcherClientList()
 	for _, client := range dClientList {
 		resp, _ := client.UpdateSchedulerView(ctx, &pb.SchedulerViewUpdate{
 			List: []*pb.SchedulerInfo{{NodeName: sch.Name, Address: sch.Addr}}, Action: "ADD",
@@ -56,7 +56,7 @@ func (s *Scheduler) Register() {
 	}
 
 	//通告新scheduler出现
-	sClientList := cmd.GetSchedulerClientList()
+	sClientList := client.GetSchedulerClientList()
 	for schedulerName, client := range sClientList {
 		if schedulerName != sch.Name {
 			resp, _ := client.PeerSchedulerUpdate(ctx, &pb.PeerSchedulersUpdate{
@@ -68,7 +68,7 @@ func (s *Scheduler) Register() {
 	}
 
 	//对新scheduler同步旧scheduler的信息
-	schClient := cmd.GetSchedulerClient(sch.Name)
+	schClient := client.GetSchedulerClient(sch.Name)
 	peerSchedulerlist := []*pb.PeerSchedulerInfo{}
 	for _, scheduler := range SchedulerList {
 		if scheduler.NodeName != sch.Name {

@@ -5,7 +5,7 @@ go 1.22
 toolchain go1.22.0
 
 require (
-	github.com/ServerlessOS/galaxy v0.0.0-20240413144541-f978a7b30efb
+	github.com/ServerlessOS/galaxy v0.0.0-20240413174141-161609f45f1d
 	google.golang.org/grpc v1.63.2
 	k8s.io/api v0.28.4
 	k8s.io/client-go v0.28.4

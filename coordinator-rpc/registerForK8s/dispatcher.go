@@ -3,7 +3,7 @@ package registerForK8s
 import (
 	"context"
 	assignor "coordinator_rpc/RendezousHashing"
-	"coordinator_rpc/cmd"
+	"coordinator_rpc/client"
 	"coordinator_rpc/server"
 	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
@@ -24,8 +24,8 @@ func (d *Dispatcher) Register() {
 		Addr: address,
 		Hash: 0,
 	}
-	server.Rh.Dispatchers[disp.Addr] = disp
-	err := cmd.DialDispatcherClient(name, address+":"+constant.DispatcherPort)
+	server.Rh.Dispatchers[disp.Name] = disp
+	err := client.DialDispatcherClient(name, address+":"+constant.DispatcherPort)
 	if err != nil {
 		log.Fatalln("dial dispatcher err,", err)
 	}
@@ -34,7 +34,7 @@ func (d *Dispatcher) Register() {
 		return
 	}
 	//给新的dispatcher同步scheduler信息
-	client := cmd.GetDispatcherClient(d.Pod.Name)
+	client := client.GetDispatcherClient(d.Pod.Name)
 	resp, err := client.UpdateSchedulerView(ctx, &pb.SchedulerViewUpdate{List: SchedulerList, Action: "ADD"})
 	if err != nil {
 		log.Fatalln("UpdateSchedulerView err,", err)

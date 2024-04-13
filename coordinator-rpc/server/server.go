@@ -3,12 +3,11 @@ package server
 import (
 	"context"
 	assignor "coordinator_rpc/RendezousHashing"
+	"coordinator_rpc/register"
 	"fmt"
 	pb "github.com/ServerlessOS/galaxy/proto"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/peer"
 	"log"
-	"net"
 	"sync"
 	"time"
 )
@@ -19,28 +18,103 @@ var (
 
 type CoordiantorServer struct{}
 
-func (c CoordiantorServer) GatewayRegister(ctx context.Context, req *pb.GatewayRegisterReq) (*pb.GatewayRegisterResp, error) {
-	pr, ok := peer.FromContext(ctx)
-	if !ok {
-		return nil, fmt.Errorf("无法获取客户端信息")
+func (c CoordiantorServer) Register(ctx context.Context, req *pb.RegisterReq) (*pb.RegisterResp, error) {
+	//gateway = 0;
+	//funcManager = 1;
+	//dispatcher  = 3;
+	//scheduler  = 4;
+	//node  = 5;
+	switch req.Type {
+	case 0:
+		module := &register.Gateway{}
+		err := module.Register(req)
+		if err != nil {
+			return &pb.RegisterResp{
+				StatusCode:        1,
+				CustomInformation: "have some err",
+			}, err
+		}
+		return &pb.RegisterResp{
+			StatusCode:        0,
+			CustomInformation: "",
+		}, nil
+	case 1:
+		module := &register.FuncManager{}
+		err := module.Register(req)
+		if err != nil {
+			return &pb.RegisterResp{
+				StatusCode:        1,
+				CustomInformation: "have some err",
+			}, err
+		}
+		return &pb.RegisterResp{
+			StatusCode:        0,
+			CustomInformation: "",
+		}, nil
+	case 2:
+		module := &register.Dispatcher{}
+		err := module.Register(req)
+		if err != nil {
+			return &pb.RegisterResp{
+				StatusCode:        1,
+				CustomInformation: "have some err",
+			}, err
+		}
+		return &pb.RegisterResp{
+			StatusCode:        0,
+			CustomInformation: "",
+		}, nil
+	case 3:
+		module := &register.Scheduler{}
+		err := module.Register(req)
+		if err != nil {
+			return &pb.RegisterResp{
+				StatusCode:        1,
+				CustomInformation: "have some err",
+			}, err
+		}
+		return &pb.RegisterResp{
+			StatusCode:        0,
+			CustomInformation: "",
+		}, nil
+	case 4:
+		module := &register.Node{}
+		err := module.Register(req)
+		if err != nil {
+			return &pb.RegisterResp{
+				StatusCode:        1,
+				CustomInformation: "have some err",
+			}, err
+		}
+		return &pb.RegisterResp{
+			StatusCode:        0,
+			CustomInformation: "",
+		}, nil
 	}
-	// 获取客户端IP地址
-	addr := pr.Addr
-	tcpAddr, ok := addr.(*net.TCPAddr)
-	if !ok {
-		return nil, fmt.Errorf("无法获取客户端IP地址")
-	}
-	IP := tcpAddr.IP.String()
-	Rh.Gateways[req.GatewayName] = &assignor.Gateway{
-		Name: req.GatewayName,
-		Addr: IP,
-	}
-	dispatchers := make([]*pb.GatewayRegisterResp_DispatcherInfo, 0)
-	for _, dispatcher := range Rh.Dispatchers {
-		dispatchers = append(dispatchers, &pb.GatewayRegisterResp_DispatcherInfo{Name: dispatcher.Name, Address: dispatcher.Addr})
-	}
-	return &pb.GatewayRegisterResp{Dispatchers: dispatchers}, nil
 }
+
+//func (c CoordiantorServer) GatewayRegister(ctx context.Context, req *pb.GatewayRegisterReq) (*pb.GatewayRegisterResp, error) {
+//	pr, ok := peer.FromContext(ctx)
+//	if !ok {
+//		return nil, fmt.Errorf("无法获取客户端信息")
+//	}
+//	// 获取客户端IP地址
+//	addr := pr.Addr
+//	tcpAddr, ok := addr.(*net.TCPAddr)
+//	if !ok {
+//		return nil, fmt.Errorf("无法获取客户端IP地址")
+//	}
+//	IP := tcpAddr.IP.String()
+//	Rh.Gateways[req.GatewayName] = &assignor.Gateway{
+//		Name: req.GatewayName,
+//		Addr: IP,
+//	}
+//	dispatchers := make([]*pb.GatewayRegisterResp_DispatcherInfo, 0)
+//	for _, dispatcher := range Rh.Dispatchers {
+//		dispatchers = append(dispatchers, &pb.GatewayRegisterResp_DispatcherInfo{Name: dispatcher.Name, Address: dispatcher.Addr})
+//	}
+//	return &pb.GatewayRegisterResp{Dispatchers: dispatchers}, nil
+//}
 
 func (c CoordiantorServer) AddNodeInfo(ctx context.Context, update *pb.NodeInfoUpdate) (*pb.CoordinatorReply, error) {
 	node := &assignor.NodeResource{
