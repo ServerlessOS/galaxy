@@ -15,10 +15,10 @@ import (
 type Dispatcher struct {
 }
 
-func (d *Dispatcher) Register() {
+func (d *Dispatcher) Register(req *pb.RegisterReq) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
-	name, address := d.Pod.Name, d.getPodIP()
+	name, address := req.Name, req.Address
 	disp := &assignor.Dispatcher{
 		Name: name,
 		Addr: address,
@@ -31,13 +31,14 @@ func (d *Dispatcher) Register() {
 	}
 	//若不需要同步
 	if len(SchedulerList) == 0 {
-		return
+		return err
 	}
 	//给新的dispatcher同步scheduler信息
-	client := client.GetDispatcherClient(d.Pod.Name)
+	client := client.GetDispatcherClient(req.Name)
 	resp, err := client.UpdateSchedulerView(ctx, &pb.SchedulerViewUpdate{List: SchedulerList, Action: "ADD"})
 	if err != nil {
-		log.Fatalln("UpdateSchedulerView err,", err)
+		return err
 	}
 	log.Printf("registerForK8s dispatcher, name:%v,state:%s", name, resp.State)
+	return nil
 }

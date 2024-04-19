@@ -5,6 +5,7 @@ import (
 	assignor "coordinator_rpc/RendezousHashing"
 	"coordinator_rpc/client"
 	"coordinator_rpc/server"
+	"fmt"
 
 	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
@@ -12,21 +13,15 @@ import (
 	"time"
 )
 
-var (
-	nodeCache = make([]*Node, 0)
-)
-
 type Node struct {
 }
 
-func (n *Node) Register() {
-	//如果此时没有scheduler，就先缓存后续再处理
+func (n *Node) Register(req *pb.RegisterReq) error {
 	if len(server.Rh.Schedulers) == 0 {
-		nodeCache = append(nodeCache, n)
-		return
+		return fmt.Errorf("not have scheduler can be choose")
 	}
 	//准备待发送的数据
-	name, address := n.Pod.Name, n.getPodIP()
+	name, address := req.Name, req.Address
 	node := &assignor.NodeResource{
 		NodeName: name,
 		HaveCpu:  constant.NodeCpu,
@@ -60,10 +55,5 @@ func (n *Node) Register() {
 		log.Fatalln("UpadateNodeResource err,name:", name, ",err:", err)
 	}
 	log.Printf("registerForK8s node, name:%v,state:%s", name, resp.State)
-	if len(nodeCache) != 0 {
-		//曾经缓存的注册请求
-		node := nodeCache[0]
-		nodeCache = nodeCache[1:]
-		node.Register()
-	}
+	return nil
 }

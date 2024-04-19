@@ -19,10 +19,10 @@ var (
 type Scheduler struct {
 }
 
-func (s *Scheduler) Register() {
+func (s *Scheduler) Register(req *pb.RegisterReq) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
-	sch := assignor.NewScheduler(s.Pod.Name, s.getPodIP())
+	sch := assignor.NewScheduler(req.Name, req.Address)
 	server.Rh.Schedulers[sch.Name] = sch
 	SchedulerList = append(SchedulerList, sch.ToProto())
 	client.DialSchedulerClient(sch.Name, sch.Addr+":"+constant.SchedulerPort)
@@ -40,7 +40,7 @@ func (s *Scheduler) Register() {
 			client := client.GetSchedulerClient(oldScheduler.Name)
 			resp, err := client.UpadateNodeResource(ctx, req)
 			if resp.State != 0 || err != nil {
-				panic(err)
+				return err
 			}
 			nodeResource.Hash = hash
 			server.Rh.SNView[nodeName] = sch.Name
@@ -83,7 +83,8 @@ func (s *Scheduler) Register() {
 		Action: "ADD",
 	})
 	if err != nil {
-		log.Fatalln("PeerSchedulerUpdate err,", err)
+		return err
 	}
 	log.Printf("registerForK8s scheduler, name:%v,state:%s", sch.Name, resp.State)
+	return nil
 }

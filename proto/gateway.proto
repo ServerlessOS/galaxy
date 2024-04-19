@@ -6,7 +6,7 @@ service Gateway {
   rpc UpdateGatewayList(UpdateListReq)returns(UpdateListResp){}
   rpc UpdateDispatcherList(UpdateListReq)returns(UpdateListResp){}
   rpc UpdateFuncManagerList(UpdateListReq)returns(UpdateListResp){}
-  rpc Register(RegisterReq)returns(RegisterResp){}
+  rpc Register(RegisterReq)returns(RegisterResp){}//所有注册请求先找gateway，若不包含地址则gateway主动从rpc中取出地址，由gateway转发到顶层控制器，顶层控制器的地址需要在启动时告诉gateway
 }
 message UpdateListReq {
   enum OperationType {

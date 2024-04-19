@@ -90,6 +90,11 @@ func (c CoordiantorServer) Register(ctx context.Context, req *pb.RegisterReq) (*
 			StatusCode:        0,
 			CustomInformation: "",
 		}, nil
+	default:
+		return &pb.RegisterResp{
+			StatusCode:        1,
+			CustomInformation: "undefined module",
+		}, nil
 	}
 }
 
