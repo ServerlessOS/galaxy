@@ -2,16 +2,16 @@ package cmd
 
 import (
 	"context"
+	"gateway/client"
 	gateway_rpc "github.com/ServerlessOS/galaxy/proto"
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+	"google.golang.org/grpc"
 	"math/rand"
 	"net"
 	"net/http"
 	"os"
 	"strconv"
-
-	"github.com/spf13/cobra"
-	"google.golang.org/grpc"
 )
 
 var (
@@ -25,11 +25,7 @@ var Cmd = &cobra.Command{
 	Short: `初始化gateway程序`,
 	//本函数用于执行命令并返回错误
 	RunE: func(cmd *cobra.Command, args []string) error {
-		gatewayName = strconv.Itoa(int(rand.Uint32()))
-		err := clientInit()
-		if err != nil {
-			log.Fatalln("client err", err)
-		}
+		initGateway()
 		var errChanHttp, errChanRpc chan error
 		go httpServer(errChanHttp)
 		go rpcServer(errChanRpc)
@@ -65,6 +61,20 @@ func init() {
 	log.SetLevel(log.InfoLevel)
 	log.SetReportCaller(true)
 }
+func initGateway() {
+	//连接顶层控制器，注册
+	gatewayName = strconv.Itoa(int(rand.Uint32()))
+	err := client.DialCoordinatorClient("def", coordinatorAddr)
+
+	if err != nil {
+		log.Fatalln("client err", err)
+	}
+	client.GetCoordinatorClient().Register(context.Background(), &gateway_rpc.RegisterReq{
+		Type:    0,
+		Name:    gatewayName,
+		Address: localHttpAddr,
+	})
+}
 
 func httpServer(errChannel chan<- error) {
 	//gateway与上游DNS服务器对接与扩容
@@ -95,7 +105,17 @@ func rpcServer(errChannel chan<- error) {
 
 type rpcServerProcess struct{}
 
-func (r rpcServerProcess) UpdateGatewayList(ctx context.Context, req *gateway_rpc.UpdateGatewayListReq) (*gateway_rpc.UpdateGatewayListResp, error) {
+func (r rpcServerProcess) UpdateGatewayList(ctx context.Context, req *gateway_rpc.UpdateListReq) (*gateway_rpc.UpdateListResp, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (r rpcServerProcess) UpdateDispatcherList(ctx context.Context, req *gateway_rpc.UpdateListReq) (*gateway_rpc.UpdateListResp, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (r rpcServerProcess) UpdateFuncManagerList(ctx context.Context, req *gateway_rpc.UpdateListReq) (*gateway_rpc.UpdateListResp, error) {
 	//TODO implement me
 	panic("implement me")
 }
@@ -115,7 +135,7 @@ func create(w http.ResponseWriter, req *http.Request) {
 	requireCpu, _ := strconv.Atoi(requireCpuString)
 	requireMem, _ := strconv.Atoi(requireMemString)
 	//调用dispatcher
-	_, err := GetDispatcherClient().Dispatch(context.Background(), &gateway_rpc.UserRequestList{List: []*gateway_rpc.UserRequest{
+	_, err := client.GetDispatcherClient().Dispatch(context.Background(), &gateway_rpc.UserRequestList{List: []*gateway_rpc.UserRequest{
 		{RequestId: rand.Int63(), FuncName: funcName, RequireCpu: int64(requireCpu), RequireMem: int64(requireMem)},
 	}})
 	if err != nil {
