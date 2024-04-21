@@ -29,6 +29,7 @@ var (
 	funcYaml        = make(map[string]*function) //通过函数名索引函数
 	ExitCh          = make(chan int)
 	functionDir     = "." + string(os.PathSeparator) + "function"
+	localIp         = getLocalIPv4().String()
 )
 
 type function struct {
@@ -45,26 +46,12 @@ var Cmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		funcManagerName = strconv.Itoa(int(rand.Uint32()))
 		var errChanRpc chan error
-		//向gateway注册
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
-		defer cancel()
-		connGateway, err := grpc.Dial(gatewayAddr, grpc.WithInsecure(), grpc.WithTimeout(time.Second*3))
-		if err != nil {
-			log.Fatalln("dial gateway error:", err)
-		}
-		client := proto.NewGatewayClient(connGateway)
-		client.Register(ctx, &proto.RegisterReq{
-			Type:    1, //    coordinator = 0; funcManager = 1;
-			Name:    funcManagerName,
-			Address: "",
-		})
-
 		if !cmd.Flags().Changed("gatewayAddr") {
 			return errors.New("gatewayAddr is required")
 		}
-
+		register()
 		rpcServer(errChanRpc)
-		err = <-errChanRpc
+		err := <-errChanRpc
 		if err != nil {
 			fmt.Printf("Error occurred: %v\n", err)
 			return err
@@ -73,6 +60,15 @@ var Cmd = &cobra.Command{
 	},
 }
 
+// Run 提供给顶层用于启动cobra根命令
+func Run(cmd *cobra.Command) (code int) {
+	err := cmd.Execute()
+	if err != nil {
+		log.Println(err)
+		os.Exit(1)
+	}
+	return 0
+}
 func init() {
 	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", ":"+constant.FuncManagerPort, "The addr used for binding to the RPC server. ")
 	Cmd.Flags().StringVarP(&gatewayAddr, "gatewayAddr", "g", "", "The address information of the gateway needs to be registered with the gateway to work properly. ")
@@ -143,15 +139,36 @@ func init() {
 	}
 	log.Println("Init func-manager success.")
 }
-
-// Run 提供给顶层用于启动cobra根命令
-func Run(cmd *cobra.Command) (code int) {
-	err := cmd.Execute()
+func register() {
+	//通过gateway向顶层控制器注册
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+	connGateway, err := grpc.Dial(gatewayAddr, grpc.WithInsecure(), grpc.WithTimeout(time.Second*3))
 	if err != nil {
-		log.Println(err)
-		os.Exit(1)
+		log.Fatalln("dial gateway error:", err)
 	}
-	return 0
+	client := proto.NewGatewayClient(connGateway)
+	if isIPAddress(localRpcAddr) {
+		tcpAddr, err := net.ResolveTCPAddr("tcp", localRpcAddr)
+		_, err = client.Register(ctx, &proto.RegisterReq{
+			Type:    1, //    coordinator = 0; funcManager = 1;
+			Name:    funcManagerName,
+			Address: tcpAddr.IP.String(),
+		})
+		if err != nil {
+			log.Fatalln(err)
+		}
+	} else {
+		_, err = client.Register(ctx, &proto.RegisterReq{
+			Type:    1, //    coordinator = 0; funcManager = 1;
+			Name:    funcManagerName,
+			Address: localIp,
+		})
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
 }
 
 func rpcServer(errChannel chan<- error) {
@@ -270,4 +287,27 @@ func buildName(f *function) string {
 		res += "-" + f.Annotation
 	}
 	return res
+}
+func isIPAddress(addr string) bool {
+	ip, _, err := net.SplitHostPort(addr)
+	if err != nil {
+		return false
+	}
+	return net.ParseIP(ip) != nil
+}
+func getLocalIPv4() net.IP {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		return nil
+	}
+
+	for _, addr := range addrs {
+		if ipNet, ok := addr.(*net.IPNet); ok && !ipNet.IP.IsLoopback() {
+			if ipNet.IP.To4() != nil {
+				fmt.Println(ipNet.IP.String())
+				return ipNet.IP
+			}
+		}
+	}
+	return nil
 }

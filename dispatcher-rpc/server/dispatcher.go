@@ -3,11 +3,17 @@ package server
 import (
 	"context"
 	"dispatcher_rpc/internal"
+	"errors"
 	"fmt"
+	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
+	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"log"
+	"math/rand/v2"
 	"net"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -17,10 +23,94 @@ var (
 	localIp       = getLocalIPv4().String()
 	connQueue     = NewConnQueue()
 	firstInit     = true
+
+	dispatcherName string
+	localRpcAddr   string
+	gatewayAddr    string
 )
 
 type DispatcherServer struct{}
 
+var Cmd = &cobra.Command{
+	Use:   "dispatcher",
+	Short: `初始化dispatcher程序`,
+	//本函数用于执行命令并返回错误
+	RunE: func(cmd *cobra.Command, args []string) error {
+		dispatcherName = strconv.Itoa(int(rand.Uint32()))
+		var errChanRpc chan error
+		if !cmd.Flags().Changed("gatewayAddr") {
+			return errors.New("gatewayAddr is required")
+		}
+		register()
+		rpcServer(errChanRpc)
+		err := <-errChanRpc
+		if err != nil {
+			fmt.Printf("Error occurred: %v\n", err)
+			return err
+		}
+		return nil
+	},
+}
+
+// Run 提供给顶层用于启动cobra根命令
+func Run(cmd *cobra.Command) (code int) {
+	err := cmd.Execute()
+	if err != nil {
+		log.Println(err)
+		os.Exit(1)
+	}
+	return 0
+}
+func init() {
+	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", ":"+constant.DispatcherPort, "The addr used for binding to the RPC server. ")
+	Cmd.Flags().StringVarP(&gatewayAddr, "gatewayAddr", "g", "", "The address information of the gateway needs to be registered with the gateway to work properly. ")
+}
+func register() {
+	//通过gateway向顶层控制器注册
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+	connGateway, err := grpc.Dial(gatewayAddr, grpc.WithInsecure(), grpc.WithTimeout(time.Second*3))
+	if err != nil {
+		log.Fatalln("dial gateway error:", err)
+	}
+	client := pb.NewGatewayClient(connGateway)
+	if isIPAddress(localRpcAddr) {
+		tcpAddr, err := net.ResolveTCPAddr("tcp", localRpcAddr)
+		_, err = client.Register(ctx, &pb.RegisterReq{
+			Type:    2, //    coordinator = 0; funcManager = 1;
+			Name:    dispatcherName,
+			Address: tcpAddr.IP.String(),
+		})
+		if err != nil {
+			log.Fatalln(err)
+		}
+	} else {
+		_, err = client.Register(ctx, &pb.RegisterReq{
+			Type:    2, //    coordinator = 0; funcManager = 1;
+			Name:    dispatcherName,
+			Address: localIp,
+		})
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
+}
+func rpcServer(errChannel chan<- error) {
+	lis, err := net.Listen("tcp", localRpcAddr)
+	if err != nil {
+		errChannel <- err
+	}
+	// 实例化grpc服务端
+	s := grpc.NewServer()
+
+	// 在gRPC服务器注册服务
+	pb.RegisterDispatcherServer(s, &DispatcherServer{})
+
+	// 启动grpc服务
+	err = s.Serve(lis)
+	errChannel <- err
+}
 func (d DispatcherServer) Statis(ctx context.Context, request *pb.UserRequest) (*pb.UserRequestReply, error) {
 	return &pb.UserRequestReply{
 		RequestId:   1,
@@ -152,4 +242,11 @@ func uniqueKeyCount(arr []int64) int {
 	}
 
 	return len(uniqueKeys)
+}
+func isIPAddress(addr string) bool {
+	ip, _, err := net.SplitHostPort(addr)
+	if err != nil {
+		return false
+	}
+	return net.ParseIP(ip) != nil
 }

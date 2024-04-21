@@ -5,9 +5,12 @@ import (
 	assignor "coordinator_rpc/RendezousHashing"
 	"coordinator_rpc/client"
 	"coordinator_rpc/server"
+	"fmt"
 	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
+	"google.golang.org/grpc/peer"
 	"log"
+	"net"
 	"time"
 )
 
@@ -25,9 +28,23 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 	server.Rh.Gateways[gateway.Name] = gateway
 	err := client.DialGatewayClient(name, address+":"+constant.GatewayRpcPort)
 	if err != nil {
-		log.Println("dial gateway err,", err)
+		pr, ok := peer.FromContext(ctx)
+		if !ok {
+			return fmt.Errorf("have some err")
+		}
+		// 获取客户端IP地址
+		addr := pr.Addr
+		tcpAddr, ok := addr.(*net.TCPAddr)
+		if !ok {
+			return fmt.Errorf("have some err")
+		}
+		IP := tcpAddr.IP.String()
+		err = client.DialGatewayClient(name, IP+":"+constant.GatewayRpcPort)
+		if err != nil {
+			log.Println("dial gateway err,", err)
+			return err
+		}
 	}
-
 	//向其它gateway同步list、向本gateway同步list、dispatcher、funcManager
 	AllgatewayList := make(map[string]string)
 	for n, v := range server.Rh.Gateways {

@@ -2,12 +2,19 @@ package server
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
+	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"log"
+	"math/rand/v2"
+	"net"
+	"os"
 	"scheduler_rpc/internal"
 	"scheduler_rpc/internal/cache"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -19,7 +26,14 @@ var (
 	NotDeployed             map[int64]struct{}
 	ConnCache               *LRUCache
 	PeerSchedulers          *internal.SchedulerView
+
+	schedulerName string
+	localRpcAddr  string
+	gatewayAddr   string
+	localIp       = getLocalIPv4().String()
 )
+
+type SchedulerServer struct{}
 
 func init() {
 	RequestQueue = internal.NewPriorityQueue()
@@ -28,10 +42,87 @@ func init() {
 	NotDeployed = make(map[int64]struct{})
 	ConnCache = NewLRUCache(20)
 	PeerSchedulers = internal.NewSchedulerView()
+	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", ":"+constant.SchedulerPort, "The addr used for binding to the RPC server. ")
+	Cmd.Flags().StringVarP(&gatewayAddr, "gatewayAddr", "g", "", "The address information of the gateway needs to be registered with the gateway to work properly. ")
+
 }
 
-type SchedulerServer struct{}
+var Cmd = &cobra.Command{
+	Use:   "scheduler",
+	Short: `初始化scheduler程序`,
+	//本函数用于执行命令并返回错误
+	RunE: func(cmd *cobra.Command, args []string) error {
+		schedulerName = strconv.Itoa(int(rand.Uint32()))
+		var errChanRpc chan error
+		if !cmd.Flags().Changed("gatewayAddr") {
+			return errors.New("gatewayAddr is required")
+		}
+		register()
+		rpcServer(errChanRpc)
+		err := <-errChanRpc
+		if err != nil {
+			fmt.Printf("Error occurred: %v\n", err)
+			return err
+		}
+		return nil
+	},
+}
 
+// Run 提供给顶层用于启动cobra根命令
+func Run(cmd *cobra.Command) (code int) {
+	err := cmd.Execute()
+	if err != nil {
+		log.Println(err)
+		os.Exit(1)
+	}
+	return 0
+}
+func register() {
+	//通过gateway向顶层控制器注册
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+	connGateway, err := grpc.Dial(gatewayAddr, grpc.WithInsecure(), grpc.WithTimeout(time.Second*3))
+	if err != nil {
+		log.Fatalln("dial gateway error:", err)
+	}
+	client := pb.NewGatewayClient(connGateway)
+	if isIPAddress(localRpcAddr) {
+		tcpAddr, err := net.ResolveTCPAddr("tcp", localRpcAddr)
+		_, err = client.Register(ctx, &pb.RegisterReq{
+			Type:    3, //    coordinator = 0; funcManager = 1;
+			Name:    schedulerName,
+			Address: tcpAddr.IP.String(),
+		})
+		if err != nil {
+			log.Fatalln(err)
+		}
+	} else {
+		_, err = client.Register(ctx, &pb.RegisterReq{
+			Type:    3, //    coordinator = 0; funcManager = 1;
+			Name:    schedulerName,
+			Address: localIp,
+		})
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
+}
+func rpcServer(errChannel chan<- error) {
+	lis, err := net.Listen("tcp", localRpcAddr)
+	if err != nil {
+		errChannel <- err
+	}
+	// 实例化grpc服务端
+	s := grpc.NewServer()
+
+	// 在gRPC服务器注册服务
+	pb.RegisterSchedulerServer(s, &SchedulerServer{})
+
+	// 启动grpc服务
+	err = s.Serve(lis)
+	errChannel <- err
+}
 func (s SchedulerServer) PeerSchedulerUpdate(ctx context.Context, update *pb.PeerSchedulersUpdate) (*pb.PeerSchedulersUpdateReply, error) {
 
 	for _, peerScheduler := range update.List {
@@ -253,4 +344,27 @@ func ForwardPeerScheudle(request *internal.RequestInfo) {
 		//fmt.Printf("Request %d  cant find the other peerScheduler\n", request.RequestId)
 	}
 
+}
+func isIPAddress(addr string) bool {
+	ip, _, err := net.SplitHostPort(addr)
+	if err != nil {
+		return false
+	}
+	return net.ParseIP(ip) != nil
+}
+func getLocalIPv4() net.IP {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		return nil
+	}
+
+	for _, addr := range addrs {
+		if ipNet, ok := addr.(*net.IPNet); ok && !ipNet.IP.IsLoopback() {
+			if ipNet.IP.To4() != nil {
+				fmt.Println(ipNet.IP.String())
+				return ipNet.IP
+			}
+		}
+	}
+	return nil
 }
