@@ -2,23 +2,34 @@ package cmd
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"gateway/client"
 	gateway_rpc "github.com/ServerlessOS/galaxy/proto"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/peer"
 	"math/rand"
 	"net"
 	"net/http"
 	"os"
 	"strconv"
+	"sync"
+	"time"
 )
 
 var (
-	localHttpAddr   string
-	localRpcAddr    string
-	coordinatorAddr string
-	gatewayName     string
+	localHttpAddr        string
+	localRpcAddr         string
+	coordinatorAddr      string
+	gatewayName          string
+	gatewayList          = make(map[string]string)
+	gatewayList_mutex    sync.Mutex
+	dispatcherList       = make(map[string]string)
+	dispatcherList_mutex sync.Mutex
+	funcManagerList      = make(map[string]string)
+	funcManager_mutex    sync.Mutex
 )
 var Cmd = &cobra.Command{
 	Use:   "gateway",
@@ -69,6 +80,7 @@ func initGateway() {
 	if err != nil {
 		log.Fatalln("client err", err)
 	}
+	//既可以让gateway自己向顶层控制器注册，也可以经由其它gateway向顶层控制器注册，为了保证gateway0和gateway1做法一致，所以采用自行注册的方案
 	client.GetCoordinatorClient().Register(context.Background(), &gateway_rpc.RegisterReq{
 		Type:    0,
 		Name:    gatewayName,
@@ -79,7 +91,6 @@ func initGateway() {
 func httpServer(errChannel chan<- error) {
 	//gateway与上游DNS服务器对接与扩容
 	http.HandleFunc("/getGatewayList", getGatewayList)
-	http.HandleFunc("/extensionGateway", extensionGateway)
 
 	http.HandleFunc("/create", create)
 	log.Println("http address:", localHttpAddr)
@@ -106,23 +117,105 @@ func rpcServer(errChannel chan<- error) {
 type rpcServerProcess struct{}
 
 func (r rpcServerProcess) UpdateGatewayList(ctx context.Context, req *gateway_rpc.UpdateListReq) (*gateway_rpc.UpdateListResp, error) {
-	//TODO implement me
-	panic("implement me")
+	//    APPEND = 0;
+	//    REDUCE = 1;
+	//    OVERRIDE = 2;
+	switch req.Type {
+	case 0:
+		for k, v := range req.List {
+			gatewayList[k] = v
+		}
+	case 1:
+		for k, _ := range req.List {
+			delete(gatewayList, k)
+		}
+	case 2:
+		gatewayList = req.List
+	default:
+		return &gateway_rpc.UpdateListResp{
+			StatusCode:  1,
+			Description: "undefined operation type",
+		}, fmt.Errorf("undefined operation type")
+	}
+	return &gateway_rpc.UpdateListResp{
+		StatusCode:  0,
+		Description: "OK",
+	}, nil
 }
 
 func (r rpcServerProcess) UpdateDispatcherList(ctx context.Context, req *gateway_rpc.UpdateListReq) (*gateway_rpc.UpdateListResp, error) {
-	//TODO implement me
-	panic("implement me")
+	//    APPEND = 0;
+	//    REDUCE = 1;
+	//    OVERRIDE = 2;
+	switch req.Type {
+	case 0:
+		for k, v := range req.List {
+			dispatcherList[k] = v
+		}
+	case 1:
+		for k, _ := range req.List {
+			delete(dispatcherList, k)
+		}
+	case 2:
+		dispatcherList = req.List
+	default:
+		return &gateway_rpc.UpdateListResp{
+			StatusCode:  1,
+			Description: "undefined operation type",
+		}, fmt.Errorf("undefined operation type")
+	}
+	return &gateway_rpc.UpdateListResp{
+		StatusCode:  0,
+		Description: "OK",
+	}, nil
 }
 
 func (r rpcServerProcess) UpdateFuncManagerList(ctx context.Context, req *gateway_rpc.UpdateListReq) (*gateway_rpc.UpdateListResp, error) {
-	//TODO implement me
-	panic("implement me")
+	//    APPEND = 0;
+	//    REDUCE = 1;
+	//    OVERRIDE = 2;
+	switch req.Type {
+	case 0:
+		for k, v := range req.List {
+			funcManagerList[k] = v
+		}
+	case 1:
+		for k, _ := range req.List {
+			delete(funcManagerList, k)
+		}
+	case 2:
+		funcManagerList = req.List
+	default:
+		return &gateway_rpc.UpdateListResp{
+			StatusCode:  1,
+			Description: "undefined operation type",
+		}, fmt.Errorf("undefined operation type")
+	}
+	return &gateway_rpc.UpdateListResp{
+		StatusCode:  0,
+		Description: "OK",
+	}, nil
 }
 
+// 将注册请求转发给顶层控制器
 func (r rpcServerProcess) Register(ctx context.Context, req *gateway_rpc.RegisterReq) (*gateway_rpc.RegisterResp, error) {
-	//TODO implement me
-	panic("implement me")
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+	if req.Address == "" {
+		pr, ok := peer.FromContext(ctx)
+		if !ok {
+			return nil, fmt.Errorf("无法获取客户端信息")
+		}
+		// 获取客户端IP地址
+		addr := pr.Addr
+		tcpAddr, ok := addr.(*net.TCPAddr)
+		if !ok {
+			return nil, fmt.Errorf("无法获取客户端IP地址")
+		}
+		req.Address = tcpAddr.IP.String()
+	}
+	resp, err := client.GetCoordinatorClient().Register(ctx, req)
+	return resp, err
 }
 
 func create(w http.ResponseWriter, req *http.Request) {
@@ -145,4 +238,11 @@ func create(w http.ResponseWriter, req *http.Request) {
 	// 发送成功的 HTTP 响应
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("create success."))
+}
+func getGatewayList(w http.ResponseWriter, req *http.Request) {
+	listString, err := json.Marshal(gatewayList)
+	if err != nil {
+		log.Errorln(err)
+	}
+	w.Write(listString)
 }
