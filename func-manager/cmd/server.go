@@ -70,7 +70,7 @@ func Run(cmd *cobra.Command) (code int) {
 	return 0
 }
 func init() {
-	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", ":"+constant.FuncManagerPort, "The addr used for binding to the RPC server. ")
+	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", "0.0.0.0:"+constant.FuncManagerPort, "The addr used for binding to the RPC server. ")
 	Cmd.Flags().StringVarP(&gatewayAddr, "gatewayAddr", "g", "", "The address information of the gateway needs to be registered with the gateway to work properly. ")
 	log.SetFormatter(&log.TextFormatter{
 		DisableColors: false,

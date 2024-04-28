@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gateway/client"
+	"github.com/ServerlessOS/galaxy/constant"
 	gateway_rpc "github.com/ServerlessOS/galaxy/proto"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -62,8 +63,8 @@ func Run(cmd *cobra.Command) (code int) {
 
 // NewGatewayCommand 生成根命令，启动服务
 func init() {
-	Cmd.Flags().StringVarP(&localHttpAddr, "localHttpAddr", "p", ":16447", "The addr used for binding to the HTTP server. ")
-	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", ":16448", "The addr used for binding to the RPC server. ")
+	Cmd.Flags().StringVarP(&localHttpAddr, "localHttpAddr", "p", "0.0.0.0:"+constant.GatewayHttpPort, "The addr used for binding to the HTTP server. ")
+	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", "0.0.0.0:"+constant.GatewayRpcPort, "The addr used for binding to the RPC server. ")
 	Cmd.Flags().StringVarP(&coordinatorAddr, "coordinatorAddr", "c", "", "The addr used for connect to the coordinator. ")
 	log.SetFormatter(&log.TextFormatter{
 		DisableColors: false,
