@@ -6,14 +6,24 @@ import (
 	"coordinator_rpc/register"
 	"fmt"
 	pb "github.com/ServerlessOS/galaxy/proto"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
-	"log"
+	"os"
 	"sync"
 	"time"
 )
 
 type CoordiantorServer struct{}
 
+func init() {
+	log.SetFormatter(&log.TextFormatter{
+		DisableColors: false,
+		FullTimestamp: true,
+	})
+	log.SetOutput(os.Stdout)
+	log.SetLevel(log.InfoLevel)
+	log.SetReportCaller(true)
+}
 func (c CoordiantorServer) Register(ctx context.Context, req *pb.RegisterReq) (*pb.RegisterResp, error) {
 	//gateway = 0;
 	//funcManager = 1;
@@ -25,6 +35,7 @@ func (c CoordiantorServer) Register(ctx context.Context, req *pb.RegisterReq) (*
 		module := &register.Gateway{}
 		err := module.Register(req)
 		if err != nil {
+			log.Errorln(err)
 			return &pb.RegisterResp{
 				StatusCode:        1,
 				CustomInformation: "have some err",
@@ -38,6 +49,7 @@ func (c CoordiantorServer) Register(ctx context.Context, req *pb.RegisterReq) (*
 		module := &register.FuncManager{}
 		err := module.Register(req)
 		if err != nil {
+			log.Errorln(err)
 			return &pb.RegisterResp{
 				StatusCode:        1,
 				CustomInformation: "have some err",
@@ -51,6 +63,7 @@ func (c CoordiantorServer) Register(ctx context.Context, req *pb.RegisterReq) (*
 		module := &register.Dispatcher{}
 		err := module.Register(req)
 		if err != nil {
+			log.Errorln(err)
 			return &pb.RegisterResp{
 				StatusCode:        1,
 				CustomInformation: "have some err",
@@ -64,6 +77,7 @@ func (c CoordiantorServer) Register(ctx context.Context, req *pb.RegisterReq) (*
 		module := &register.Scheduler{}
 		err := module.Register(req)
 		if err != nil {
+			log.Errorln(err)
 			return &pb.RegisterResp{
 				StatusCode:        1,
 				CustomInformation: "have some err",
@@ -77,6 +91,7 @@ func (c CoordiantorServer) Register(ctx context.Context, req *pb.RegisterReq) (*
 		module := &register.Node{}
 		err := module.Register(req)
 		if err != nil {
+			log.Errorln(err)
 			return &pb.RegisterResp{
 				StatusCode:        1,
 				CustomInformation: "have some err",
@@ -106,6 +121,7 @@ func (c CoordiantorServer) AddNodeInfo(ctx context.Context, update *pb.NodeInfoU
 	actions := register.Rh.AddNode(node)
 	err := doActions(actions)
 	if err != nil {
+		log.Errorln(err)
 		return &pb.CoordinatorReply{
 			State:   1,
 			Message: fmt.Sprintf("Err:%s", err),
@@ -124,6 +140,7 @@ func (c CoordiantorServer) AddSchedulerInfo(ctx context.Context, update *pb.Sche
 	// inform the nodes
 	err := doActions(actions)
 	if err != nil {
+		log.Errorln(err)
 		return &pb.CoordinatorReply{
 			State:   1,
 			Message: fmt.Sprintf("Err:%s", err),

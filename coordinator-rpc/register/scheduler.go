@@ -5,7 +5,7 @@ import (
 	assignor "coordinator_rpc/RendezousHashing"
 	"coordinator_rpc/client"
 	pb "github.com/ServerlessOS/galaxy/proto"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -20,7 +20,7 @@ func (s *Scheduler) Register(req *pb.RegisterReq) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 	sch := assignor.NewScheduler(req.Name, req.Address)
-	log.Println("new scheduler,address:", req.Address, "\nname:", req.Name)
+	log.Println("new scheduler,Name:", req.Name, "\naddress:", req.Address)
 	Rh.Schedulers[sch.Name] = sch
 	SchedulerList = append(SchedulerList, sch.ToProto())
 	client.DialSchedulerClient(sch.Name, sch.Addr)
@@ -81,6 +81,7 @@ func (s *Scheduler) Register(req *pb.RegisterReq) error {
 		Action: "ADD",
 	})
 	if err != nil {
+		log.Errorln(err)
 		return err
 	}
 	log.Printf("register scheduler, name:%v,state:%s", sch.Name, resp.State)

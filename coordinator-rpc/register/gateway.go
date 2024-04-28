@@ -6,8 +6,8 @@ import (
 	"coordinator_rpc/client"
 	"fmt"
 	pb "github.com/ServerlessOS/galaxy/proto"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc/peer"
-	"log"
 	"net"
 	"time"
 )
@@ -19,7 +19,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 	name, address := req.Name, req.Address
-	log.Println("new gateway,address:", address, "\nname:", name)
+	log.Println("new gateway,name:", name, "\naddress:", address)
 	gateway := &assignor.Gateway{
 		Name: name,
 		Addr: address,
@@ -40,7 +40,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 		IP := tcpAddr.IP.String()
 		err = client.DialGatewayClient(name, IP)
 		if err != nil {
-			log.Println("dial gateway err,", err)
+			log.Errorln("dial gateway err,", err)
 			return err
 		}
 	}
@@ -60,7 +60,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 			List: map[string]string{v.Name: v.Addr},
 		})
 		if resp.StatusCode != 0 || err != nil {
-			log.Println("UpdateGatewayList err:", err)
+			log.Errorln("UpdateGatewayList err:", err)
 		}
 	}
 	//本gateway同步
@@ -72,7 +72,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 		List: AllgatewayList,
 	})
 	if err != nil || resp.StatusCode != 0 {
-		log.Println("UpdateGatewayList err:", err)
+		log.Errorln("UpdateGatewayList err:", err)
 	}
 	//dispatcher
 	AllDispatcherList := make(map[string]string)
@@ -84,7 +84,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 		List: AllDispatcherList,
 	})
 	if err != nil || resp.StatusCode != 0 {
-		log.Println("UpdateDispatcherList err:", err)
+		log.Errorln("UpdateDispatcherList err:", err)
 	}
 	//funcManager
 	AllFuncManagerList := make(map[string]string)
@@ -96,7 +96,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 		List: AllFuncManagerList,
 	})
 	if err != nil || resp.StatusCode != 0 {
-		log.Println("UpdateFuncManagerList err:", err)
+		log.Errorln("UpdateFuncManagerList err:", err)
 	}
 	log.Printf("register gateway, name:%v", name)
 	return nil

@@ -6,6 +6,8 @@ toolchain go1.22.0
 
 require (
 	github.com/ServerlessOS/galaxy v0.0.0-20240413193224-cedf82885c66
+	github.com/sirupsen/logrus v1.9.3
+	google.golang.org/appengine v1.6.8
 	google.golang.org/grpc v1.63.2
 	k8s.io/api v0.28.4
 	k8s.io/client-go v0.28.4
@@ -39,7 +41,6 @@ require (
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.18.0 // indirect
-	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240227224415-6ceb2ff114de // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect

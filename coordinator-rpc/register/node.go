@@ -8,7 +8,7 @@ import (
 
 	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -21,7 +21,7 @@ func (n *Node) Register(req *pb.RegisterReq) error {
 	}
 	//准备待发送的数据
 	name, address := req.Name, req.Address
-	log.Println("new node,address:", address, "\nname:", name)
+	log.Println("new node,name:", name, "\naddress:", address)
 	node := &assignor.NodeResource{
 		NodeName: name,
 		HaveCpu:  constant.NodeCpu,
@@ -52,7 +52,7 @@ func (n *Node) Register(req *pb.RegisterReq) error {
 	defer cancel()
 	resp, err := sClient.UpadateNodeResource(ctx, &pb.NodeResourceUpdate{List: list, Action: "ADD"})
 	if err != nil {
-		log.Fatalln("UpadateNodeResource err,name:", name, ",err:", err)
+		log.Errorln("UpadateNodeResource err,name:", name, ",err:", err)
 	}
 	log.Printf("register node, name:%v,state:%s", name, resp.State)
 	return nil
