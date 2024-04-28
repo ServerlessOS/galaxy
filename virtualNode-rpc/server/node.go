@@ -69,7 +69,7 @@ func register() {
 	//通过gateway向顶层控制器注册
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
-	connGateway, err := grpc.Dial(gatewayAddr, grpc.WithInsecure(), grpc.WithTimeout(time.Second*3))
+	connGateway, err := grpc.Dial(gatewayAddr+":"+constant.GatewayRpcPort, grpc.WithInsecure(), grpc.WithTimeout(time.Second*3))
 	if err != nil {
 		log.Fatalln("dial gateway error:", err)
 	}

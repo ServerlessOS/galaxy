@@ -4,7 +4,6 @@ import (
 	"context"
 	assignor "coordinator_rpc/RendezousHashing"
 	"coordinator_rpc/client"
-	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
 	"log"
 	"time"
@@ -17,13 +16,15 @@ func (d *Dispatcher) Register(req *pb.RegisterReq) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 	name, address := req.Name, req.Address
+	log.Println("new dispatcher,address:", address, "\nname:", name)
+
 	disp := &assignor.Dispatcher{
 		Name: name,
 		Addr: address,
 		Hash: 0,
 	}
 	Rh.Dispatchers[disp.Name] = disp
-	err := client.DialDispatcherClient(name, address+":"+constant.DispatcherPort)
+	err := client.DialDispatcherClient(name, address)
 	if err != nil {
 		log.Fatalln("dial dispatcher err,", err)
 	}
@@ -37,6 +38,6 @@ func (d *Dispatcher) Register(req *pb.RegisterReq) error {
 	if err != nil {
 		return err
 	}
-	log.Printf("registerForK8s dispatcher, name:%v,state:%s", name, resp.State)
+	log.Printf("register dispatcher, name:%v,state:%s", name, resp.State)
 	return nil
 }

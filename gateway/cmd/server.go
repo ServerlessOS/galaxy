@@ -30,16 +30,17 @@ var (
 	dispatcherList_mutex sync.Mutex
 	funcManagerList      = make(map[string]string)
 	funcManager_mutex    sync.Mutex
+	localIp              = getLocalIPv4().String()
 )
 var Cmd = &cobra.Command{
 	Use:   "gateway",
 	Short: `初始化gateway程序`,
 	//本函数用于执行命令并返回错误
 	RunE: func(cmd *cobra.Command, args []string) error {
-		initGateway()
 		var errChanHttp, errChanRpc chan error
 		go httpServer(errChanHttp)
 		go rpcServer(errChanRpc)
+		initGateway()
 		select {
 		case errHttp := <-errChanHttp:
 			return errHttp
@@ -80,16 +81,27 @@ func initGateway() {
 	if err != nil {
 		log.Fatalln("client err", err)
 	}
+	log.Println("coordinator connect success")
 	//既可以让gateway自己向顶层控制器注册，也可以经由其它gateway向顶层控制器注册，为了保证gateway0和gateway1做法一致，所以采用自行注册的方案
 	if isIPAddress(localRpcAddr) {
 		tcpAddr, err := net.ResolveTCPAddr("tcp", localRpcAddr)
-		client.GetCoordinatorClient().Register(context.Background(), &gateway_rpc.RegisterReq{
-			Type:    0,
-			Name:    gatewayName,
-			Address: tcpAddr.IP.String(),
-		})
 		if err != nil {
 			log.Fatalln(err)
+		}
+		if tcpAddr.IP.String() == "<nil>" { //todo:!这里的判断有问题
+			client.GetCoordinatorClient().Register(context.Background(), &gateway_rpc.RegisterReq{
+				Type:    0,
+				Name:    gatewayName,
+				Address: localIp,
+			})
+			log.Println("register gateway,ip:", localIp)
+		} else {
+			client.GetCoordinatorClient().Register(context.Background(), &gateway_rpc.RegisterReq{
+				Type:    0,
+				Name:    gatewayName,
+				Address: tcpAddr.IP.String(),
+			})
+			log.Println("register gateway,ip:", tcpAddr.IP.String())
 		}
 	} else {
 		client.GetCoordinatorClient().Register(context.Background(), &gateway_rpc.RegisterReq{
@@ -97,6 +109,7 @@ func initGateway() {
 			Name:    gatewayName,
 			Address: localRpcAddr,
 		})
+		log.Println("register gateway,ip:", localRpcAddr)
 		if err != nil {
 			log.Fatalln(err)
 		}

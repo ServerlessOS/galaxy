@@ -4,7 +4,6 @@ import (
 	"context"
 	assignor "coordinator_rpc/RendezousHashing"
 	"coordinator_rpc/client"
-	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
 	"log"
 	"time"
@@ -17,12 +16,13 @@ func (g *FuncManager) Register(req *pb.RegisterReq) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 	name, address := req.Name, req.Address
+	log.Println("new funcManager,address:", address, "\nname:", name)
 	funcManager := &assignor.FuncManager{
 		Name: name,
 		Addr: address,
 	}
 	Rh.FuncManagers[funcManager.Name] = funcManager
-	err := client.DialGatewayClient(name, address+":"+constant.FuncManagerPort)
+	err := client.DialGatewayClient(name, address)
 	if err != nil {
 		log.Println("dial funcManager err,", err)
 	}

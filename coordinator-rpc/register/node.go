@@ -21,6 +21,7 @@ func (n *Node) Register(req *pb.RegisterReq) error {
 	}
 	//准备待发送的数据
 	name, address := req.Name, req.Address
+	log.Println("new node,address:", address, "\nname:", name)
 	node := &assignor.NodeResource{
 		NodeName: name,
 		HaveCpu:  constant.NodeCpu,
@@ -53,6 +54,6 @@ func (n *Node) Register(req *pb.RegisterReq) error {
 	if err != nil {
 		log.Fatalln("UpadateNodeResource err,name:", name, ",err:", err)
 	}
-	log.Printf("registerForK8s node, name:%v,state:%s", name, resp.State)
+	log.Printf("register node, name:%v,state:%s", name, resp.State)
 	return nil
 }

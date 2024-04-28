@@ -1,8 +1,10 @@
 package client
 
 import (
+	"context"
 	"github.com/ServerlessOS/galaxy/constant"
 	"github.com/ServerlessOS/galaxy/proto"
+	"google.golang.org/appengine/log"
 	"google.golang.org/grpc"
 )
 
@@ -73,6 +75,7 @@ func DialDispatcherClient(id string, address string) error {
 func DialGatewayClient(id string, address string) error {
 	connGateway, err := grpc.Dial(address+":"+constant.GatewayRpcPort, grpc.WithInsecure())
 	if err != nil {
+		log.Errorf(context.Background(), "dial gateway err")
 		return err
 	}
 	client := proto.NewGatewayClient(connGateway)

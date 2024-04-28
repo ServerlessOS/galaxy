@@ -5,7 +5,6 @@ import (
 	assignor "coordinator_rpc/RendezousHashing"
 	"coordinator_rpc/client"
 	"fmt"
-	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
 	"google.golang.org/grpc/peer"
 	"log"
@@ -20,12 +19,13 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 	name, address := req.Name, req.Address
+	log.Println("new gateway,address:", address, "\nname:", name)
 	gateway := &assignor.Gateway{
 		Name: name,
 		Addr: address,
 	}
 	Rh.Gateways[gateway.Name] = gateway
-	err := client.DialGatewayClient(name, address+":"+constant.GatewayRpcPort)
+	err := client.DialGatewayClient(name, address)
 	if err != nil {
 		pr, ok := peer.FromContext(ctx)
 		if !ok {
@@ -38,7 +38,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 			return fmt.Errorf("have some err")
 		}
 		IP := tcpAddr.IP.String()
-		err = client.DialGatewayClient(name, IP+":"+constant.GatewayRpcPort)
+		err = client.DialGatewayClient(name, IP)
 		if err != nil {
 			log.Println("dial gateway err,", err)
 			return err
@@ -71,7 +71,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 		Type: 2,
 		List: AllgatewayList,
 	})
-	if resp.StatusCode != 0 || err != nil {
+	if err != nil || resp.StatusCode != 0 {
 		log.Println("UpdateGatewayList err:", err)
 	}
 	//dispatcher
@@ -83,7 +83,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 		Type: 2,
 		List: AllDispatcherList,
 	})
-	if resp.StatusCode != 0 || err != nil {
+	if err != nil || resp.StatusCode != 0 {
 		log.Println("UpdateDispatcherList err:", err)
 	}
 	//funcManager
@@ -95,7 +95,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 		Type: 2,
 		List: AllFuncManagerList,
 	})
-	if resp.StatusCode != 0 || err != nil {
+	if err != nil || resp.StatusCode != 0 {
 		log.Println("UpdateFuncManagerList err:", err)
 	}
 	log.Printf("register gateway, name:%v", name)

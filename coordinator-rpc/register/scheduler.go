@@ -4,7 +4,6 @@ import (
 	"context"
 	assignor "coordinator_rpc/RendezousHashing"
 	"coordinator_rpc/client"
-	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
 	"log"
 	"time"
@@ -21,9 +20,10 @@ func (s *Scheduler) Register(req *pb.RegisterReq) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 	sch := assignor.NewScheduler(req.Name, req.Address)
+	log.Println("new scheduler,address:", req.Address, "\nname:", req.Name)
 	Rh.Schedulers[sch.Name] = sch
 	SchedulerList = append(SchedulerList, sch.ToProto())
-	client.DialSchedulerClient(sch.Name, sch.Addr+":"+constant.SchedulerPort)
+	client.DialSchedulerClient(sch.Name, sch.Addr)
 	for nodeName, nodeResource := range Rh.Nodes {
 		hash := Rh.Hash(sch.Name + nodeName)
 		if hash > nodeResource.Hash {
@@ -83,6 +83,6 @@ func (s *Scheduler) Register(req *pb.RegisterReq) error {
 	if err != nil {
 		return err
 	}
-	log.Printf("registerForK8s scheduler, name:%v,state:%s", sch.Name, resp.State)
+	log.Printf("register scheduler, name:%v,state:%s", sch.Name, resp.State)
 	return nil
 }
