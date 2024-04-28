@@ -77,7 +77,7 @@ func register() {
 	if isIPAddress(localRpcAddr) {
 		tcpAddr, err := net.ResolveTCPAddr("tcp", localRpcAddr)
 		_, err = client.Register(ctx, &pb.RegisterReq{
-			Type:    3, //    coordinator = 0; funcManager = 1;
+			Type:    4, //    coordinator = 0; funcManager = 1;
 			Name:    nodeName,
 			Address: tcpAddr.IP.String(),
 		})
@@ -86,7 +86,7 @@ func register() {
 		}
 	} else {
 		_, err = client.Register(ctx, &pb.RegisterReq{
-			Type:    3, //    coordinator = 0; funcManager = 1;
+			Type:    4, //    coordinator = 0; funcManager = 1;
 			Name:    nodeName,
 			Address: localIp,
 		})

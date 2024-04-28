@@ -81,11 +81,27 @@ func initGateway() {
 		log.Fatalln("client err", err)
 	}
 	//既可以让gateway自己向顶层控制器注册，也可以经由其它gateway向顶层控制器注册，为了保证gateway0和gateway1做法一致，所以采用自行注册的方案
-	client.GetCoordinatorClient().Register(context.Background(), &gateway_rpc.RegisterReq{
-		Type:    0,
-		Name:    gatewayName,
-		Address: localHttpAddr,
-	})
+	if isIPAddress(localRpcAddr) {
+		tcpAddr, err := net.ResolveTCPAddr("tcp", localRpcAddr)
+		client.GetCoordinatorClient().Register(context.Background(), &gateway_rpc.RegisterReq{
+			Type:    0,
+			Name:    gatewayName,
+			Address: tcpAddr.IP.String(),
+		})
+		if err != nil {
+			log.Fatalln(err)
+		}
+	} else {
+		client.GetCoordinatorClient().Register(context.Background(), &gateway_rpc.RegisterReq{
+			Type:    0,
+			Name:    gatewayName,
+			Address: localRpcAddr,
+		})
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
 }
 
 func httpServer(errChannel chan<- error) {
@@ -245,4 +261,27 @@ func getGatewayList(w http.ResponseWriter, req *http.Request) {
 		log.Errorln(err)
 	}
 	w.Write(listString)
+}
+func isIPAddress(addr string) bool {
+	ip, _, err := net.SplitHostPort(addr)
+	if err != nil {
+		return false
+	}
+	return net.ParseIP(ip) != nil
+}
+func getLocalIPv4() net.IP {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		return nil
+	}
+
+	for _, addr := range addrs {
+		if ipNet, ok := addr.(*net.IPNet); ok && !ipNet.IP.IsLoopback() {
+			if ipNet.IP.To4() != nil {
+				fmt.Println(ipNet.IP.String())
+				return ipNet.IP
+			}
+		}
+	}
+	return nil
 }
