@@ -42,7 +42,7 @@ func init() {
 	NotDeployed = make(map[int64]struct{})
 	ConnCache = NewLRUCache(20)
 	PeerSchedulers = internal.NewSchedulerView()
-	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", ":"+constant.SchedulerPort, "The addr used for binding to the RPC server. ")
+	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", "0.0.0.0:"+constant.SchedulerPort, "The addr used for binding to the RPC server. ")
 	Cmd.Flags().StringVarP(&gatewayAddr, "gatewayAddr", "g", "", "The address information of the gateway needs to be registered with the gateway to work properly. ")
 
 }

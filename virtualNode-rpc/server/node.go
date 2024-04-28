@@ -29,7 +29,7 @@ var (
 
 func init() {
 	ConnCache = NewLRUCache(20)
-	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", ":"+constant.NodePort, "The addr used for binding to the RPC server. ")
+	Cmd.Flags().StringVarP(&localRpcAddr, "localRpcAddr", "r", "0.0.0.0:"+constant.NodePort, "The addr used for binding to the RPC server. ")
 	Cmd.Flags().StringVarP(&gatewayAddr, "gatewayAddr", "g", "", "The address information of the gateway needs to be registered with the gateway to work properly. ")
 }
 
