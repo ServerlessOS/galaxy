@@ -4,7 +4,7 @@ import (
 	"context"
 	assignor "coordinator_rpc/RendezousHashing"
 	"coordinator_rpc/client"
-	"coordinator_rpc/server"
+	"coordinator_rpc/register"
 	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
 	"log"
@@ -24,7 +24,7 @@ func (d *Dispatcher) Register() {
 		Addr: address,
 		Hash: 0,
 	}
-	server.Rh.Dispatchers[disp.Name] = disp
+	register.Rh.Dispatchers[disp.Name] = disp
 	err := client.DialDispatcherClient(name, address+":"+constant.DispatcherPort)
 	if err != nil {
 		log.Fatalln("dial dispatcher err,", err)

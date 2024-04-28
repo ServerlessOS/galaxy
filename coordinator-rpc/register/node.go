@@ -4,7 +4,6 @@ import (
 	"context"
 	assignor "coordinator_rpc/RendezousHashing"
 	"coordinator_rpc/client"
-	"coordinator_rpc/server"
 	"fmt"
 
 	"github.com/ServerlessOS/galaxy/constant"
@@ -17,7 +16,7 @@ type Node struct {
 }
 
 func (n *Node) Register(req *pb.RegisterReq) error {
-	if len(server.Rh.Schedulers) == 0 {
+	if len(Rh.Schedulers) == 0 {
 		return fmt.Errorf("not have scheduler can be choose")
 	}
 	//准备待发送的数据
@@ -35,16 +34,16 @@ func (n *Node) Register(req *pb.RegisterReq) error {
 	//挑选数据接收者
 	var selectedScheduler *assignor.Scheduler
 	maxHash := uint32(0)
-	for _, scheduler := range server.Rh.Schedulers {
-		hash := server.Rh.Hash(scheduler.Name + node.NodeName)
+	for _, scheduler := range Rh.Schedulers {
+		hash := Rh.Hash(scheduler.Name + node.NodeName)
 		if hash > maxHash {
 			maxHash = hash
 			selectedScheduler = scheduler
 		}
 	}
 	node.Hash = assignor.FnvHash(node.NodeName)
-	server.Rh.Nodes[node.NodeName] = node
-	server.Rh.SNView[node.NodeName] = selectedScheduler.Name
+	Rh.Nodes[node.NodeName] = node
+	Rh.SNView[node.NodeName] = selectedScheduler.Name
 
 	sClient := client.GetSchedulerClient(selectedScheduler.Name)
 

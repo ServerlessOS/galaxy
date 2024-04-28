@@ -4,8 +4,6 @@ import (
 	"context"
 	assignor "coordinator_rpc/RendezousHashing"
 	"coordinator_rpc/client"
-	"coordinator_rpc/server"
-
 	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
 	"log"
@@ -23,13 +21,13 @@ func (s *Scheduler) Register(req *pb.RegisterReq) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 	sch := assignor.NewScheduler(req.Name, req.Address)
-	server.Rh.Schedulers[sch.Name] = sch
+	Rh.Schedulers[sch.Name] = sch
 	SchedulerList = append(SchedulerList, sch.ToProto())
 	client.DialSchedulerClient(sch.Name, sch.Addr+":"+constant.SchedulerPort)
-	for nodeName, nodeResource := range server.Rh.Nodes {
-		hash := server.Rh.Hash(sch.Name + nodeName)
+	for nodeName, nodeResource := range Rh.Nodes {
+		hash := Rh.Hash(sch.Name + nodeName)
 		if hash > nodeResource.Hash {
-			oldScheduler := server.Rh.Schedulers[server.Rh.SNView[nodeName]]
+			oldScheduler := Rh.Schedulers[Rh.SNView[nodeName]]
 			// remove the node from the schueduler
 			req := &pb.NodeResourceUpdate{
 				List:       []*pb.NodeResource{nodeResource.ToProto()},
@@ -43,7 +41,7 @@ func (s *Scheduler) Register(req *pb.RegisterReq) error {
 				return err
 			}
 			nodeResource.Hash = hash
-			server.Rh.SNView[nodeName] = sch.Name
+			Rh.SNView[nodeName] = sch.Name
 		}
 	}
 	//通知上游的dispatcher

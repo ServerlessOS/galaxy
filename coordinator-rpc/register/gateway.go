@@ -4,7 +4,6 @@ import (
 	"context"
 	assignor "coordinator_rpc/RendezousHashing"
 	"coordinator_rpc/client"
-	"coordinator_rpc/server"
 	"fmt"
 	"github.com/ServerlessOS/galaxy/constant"
 	pb "github.com/ServerlessOS/galaxy/proto"
@@ -25,7 +24,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 		Name: name,
 		Addr: address,
 	}
-	server.Rh.Gateways[gateway.Name] = gateway
+	Rh.Gateways[gateway.Name] = gateway
 	err := client.DialGatewayClient(name, address+":"+constant.GatewayRpcPort)
 	if err != nil {
 		pr, ok := peer.FromContext(ctx)
@@ -47,7 +46,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 	}
 	//向其它gateway同步list、向本gateway同步list、dispatcher、funcManager
 	AllgatewayList := make(map[string]string)
-	for n, v := range server.Rh.Gateways {
+	for n, v := range Rh.Gateways {
 		if n == name {
 			//自己不同步
 			continue
@@ -77,7 +76,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 	}
 	//dispatcher
 	AllDispatcherList := make(map[string]string)
-	for _, v := range server.Rh.Dispatchers {
+	for _, v := range Rh.Dispatchers {
 		AllDispatcherList[v.Name] = v.Addr
 	}
 	resp, err = client.GetGatewayClient(name).UpdateDispatcherList(ctx, &pb.UpdateListReq{
@@ -89,7 +88,7 @@ func (g *Gateway) Register(req *pb.RegisterReq) error {
 	}
 	//funcManager
 	AllFuncManagerList := make(map[string]string)
-	for _, v := range server.Rh.FuncManagers {
+	for _, v := range Rh.FuncManagers {
 		AllFuncManagerList[v.Name] = v.Addr
 	}
 	resp, err = client.GetGatewayClient(name).UpdateFuncManagerList(ctx, &pb.UpdateListReq{

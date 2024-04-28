@@ -12,10 +12,6 @@ import (
 	"time"
 )
 
-var (
-	Rh = assignor.NewRendezvousHashing()
-)
-
 type CoordiantorServer struct{}
 
 func (c CoordiantorServer) Register(ctx context.Context, req *pb.RegisterReq) (*pb.RegisterResp, error) {
@@ -98,29 +94,6 @@ func (c CoordiantorServer) Register(ctx context.Context, req *pb.RegisterReq) (*
 	}
 }
 
-//func (c CoordiantorServer) GatewayRegister(ctx context.Context, req *pb.GatewayRegisterReq) (*pb.GatewayRegisterResp, error) {
-//	pr, ok := peer.FromContext(ctx)
-//	if !ok {
-//		return nil, fmt.Errorf("无法获取客户端信息")
-//	}
-//	// 获取客户端IP地址
-//	addr := pr.Addr
-//	tcpAddr, ok := addr.(*net.TCPAddr)
-//	if !ok {
-//		return nil, fmt.Errorf("无法获取客户端IP地址")
-//	}
-//	IP := tcpAddr.IP.String()
-//	Rh.Gateways[req.GatewayName] = &assignor.Gateway{
-//		Name: req.GatewayName,
-//		Addr: IP,
-//	}
-//	dispatchers := make([]*pb.GatewayRegisterResp_DispatcherInfo, 0)
-//	for _, dispatcher := range Rh.Dispatchers {
-//		dispatchers = append(dispatchers, &pb.GatewayRegisterResp_DispatcherInfo{Name: dispatcher.Name, Address: dispatcher.Addr})
-//	}
-//	return &pb.GatewayRegisterResp{Dispatchers: dispatchers}, nil
-//}
-
 func (c CoordiantorServer) AddNodeInfo(ctx context.Context, update *pb.NodeInfoUpdate) (*pb.CoordinatorReply, error) {
 	node := &assignor.NodeResource{
 		NodeName: update.NodeName,
@@ -130,7 +103,7 @@ func (c CoordiantorServer) AddNodeInfo(ctx context.Context, update *pb.NodeInfoU
 		Port:     "16446",
 		Hash:     0,
 	}
-	actions := Rh.AddNode(node)
+	actions := register.Rh.AddNode(node)
 	err := doActions(actions)
 	if err != nil {
 		return &pb.CoordinatorReply{
@@ -146,7 +119,7 @@ func (c CoordiantorServer) AddNodeInfo(ctx context.Context, update *pb.NodeInfoU
 
 func (c CoordiantorServer) AddSchedulerInfo(ctx context.Context, update *pb.SchedulerInfoUpdate) (*pb.CoordinatorReply, error) {
 	sch := assignor.NewScheduler(update.SchedulerName, update.Address)
-	actions := Rh.AddScheduler(sch)
+	actions := register.Rh.AddScheduler(sch)
 
 	// inform the nodes
 	err := doActions(actions)
@@ -164,7 +137,7 @@ func (c CoordiantorServer) AddSchedulerInfo(ctx context.Context, update *pb.Sche
 		}},
 		Action: "ADD",
 	}
-	for dispatcherAddr, _ := range Rh.Dispatchers {
+	for dispatcherAddr, _ := range register.Rh.Dispatchers {
 		fmt.Printf("Add scheduler to dispatcher %s \n", dispatcherAddr)
 		conn, _ := grpc.Dial(fmt.Sprintf("%s:16444", dispatcherAddr), grpc.WithInsecure())
 		defer conn.Close()
@@ -180,7 +153,7 @@ func (c CoordiantorServer) AddSchedulerInfo(ctx context.Context, update *pb.Sche
 		Action: "ADD",
 	}
 	//inform old peer Schedulers
-	for _, s := range Rh.Schedulers {
+	for _, s := range register.Rh.Schedulers {
 
 		if s.Addr != update.Address {
 			fmt.Printf("Add scheduler to peer scheduler %s\n", s.Addr)
@@ -197,7 +170,7 @@ func (c CoordiantorServer) AddSchedulerInfo(ctx context.Context, update *pb.Sche
 		Action: "ADD",
 	}
 	opsuList := []*pb.PeerSchedulerInfo{}
-	for schedulerAddr, scheduler := range Rh.Schedulers {
+	for schedulerAddr, scheduler := range register.Rh.Schedulers {
 		if schedulerAddr != update.Address {
 			opsuList = append(opsuList, &pb.PeerSchedulerInfo{
 				NodeName: scheduler.Name,
@@ -225,7 +198,7 @@ func (c CoordiantorServer) AddDispatcherInfo(ctx context.Context, update *pb.Dis
 		Addr: update.Address,
 		Hash: 0,
 	}
-	schedulers := Rh.AddDispatcher(disp)
+	schedulers := register.Rh.AddDispatcher(disp)
 	transInfo := &pb.SchedulerViewUpdate{
 		List:   make([]*pb.SchedulerInfo, 0),
 		Action: "ADD",
@@ -261,9 +234,9 @@ func doActions(actions []*assignor.TransInfo) error {
 		go func(action *assignor.TransInfo) {
 			defer wg.Done()
 			if action.Action == "ADD" {
-				fmt.Printf("Add the %d nodes to %s\n", len(action.NodeResourceList), Rh.GetSchedulerNameByAddr(action.SourceAddr))
+				fmt.Printf("Add the %d nodes to %s\n", len(action.NodeResourceList), register.Rh.GetSchedulerNameByAddr(action.SourceAddr))
 			} else {
-				fmt.Printf("Move the %d nodes from %s to %s\n", len(action.NodeResourceList), Rh.GetSchedulerNameByAddr(action.SourceAddr), Rh.GetSchedulerNameByAddr(action.TargetAddr))
+				fmt.Printf("Move the %d nodes from %s to %s\n", len(action.NodeResourceList), register.Rh.GetSchedulerNameByAddr(action.SourceAddr), register.Rh.GetSchedulerNameByAddr(action.TargetAddr))
 			}
 			nru := TransInfo2NodeUpdate(action)
 			conn, err := grpc.Dial(fmt.Sprintf("%s:16445", action.SourceAddr), grpc.WithInsecure())
@@ -291,14 +264,14 @@ func doActions(actions []*assignor.TransInfo) error {
 	endTime := time.Now()
 	executionTime := endTime.Sub(startTime)
 	fmt.Println("Execution Time:", executionTime)
-	Rh.Statisics()
+	register.Rh.Statisics()
 	return nil
 
 	//for _, action := range mergeActions {
 	//	if action.Action == "ADD" {
-	//		fmt.Printf("Add the %d nodes to %s\n", len(action.NodeResourceList), Rh.GetSchedulerNameByAddr(action.SourceAddr))
+	//		fmt.Printf("Add the %d nodes to %s\n", len(action.NodeResourceList), register.Rh.GetSchedulerNameByAddr(action.SourceAddr))
 	//	} else {
-	//		fmt.Printf("Move the %d nodes from %s to %s\n", len(action.NodeResourceList), Rh.GetSchedulerNameByAddr(action.SourceAddr), Rh.GetSchedulerNameByAddr(action.TargetAddr))
+	//		fmt.Printf("Move the %d nodes from %s to %s\n", len(action.NodeResourceList), register.Rh.GetSchedulerNameByAddr(action.SourceAddr), register.Rh.GetSchedulerNameByAddr(action.TargetAddr))
 	//	}
 	//	nru := TransInfo2NodeUpdate(action)
 	//	conn, _ := grpc.Dial(fmt.Sprintf("%s:16445", action.SourceAddr), grpc.WithInsecure())
