@@ -125,6 +125,20 @@ func rpcServer(errChannel chan<- error) {
 
 type rpcServerProcess struct{}
 
+func (r rpcServerProcess) GetFuncInfo(ctx context.Context, req *gateway_rpc.GetFuncInfoReq) (*gateway_rpc.GetFuncInfoResp, error) {
+	resp, err := client.GetFuncManagerClient().Get(ctx, &gateway_rpc.GetReq{Request: &gateway_rpc.GeneralRequest{
+		RequestId: 0,
+		Name:      req.FuncName,
+	}})
+	if err != nil {
+		return nil, err
+	}
+	return &gateway_rpc.GetFuncInfoResp{
+		StatusCode: 0,
+		FuncInfo:   resp.Document,
+	}, nil
+}
+
 func (r rpcServerProcess) UpdateGatewayList(ctx context.Context, req *gateway_rpc.UpdateListReq) (*gateway_rpc.UpdateListResp, error) {
 	//    APPEND = 0;
 	//    REDUCE = 1;

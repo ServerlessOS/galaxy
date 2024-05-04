@@ -5,7 +5,7 @@ go 1.22
 toolchain go1.22.0
 
 require (
-	github.com/ServerlessOS/galaxy v0.0.0-20240421083552-a84d7c383ae3
+	github.com/ServerlessOS/galaxy v0.0.0-20240504150639-68bcc7eba630
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.0
 	google.golang.org/grpc v1.63.2

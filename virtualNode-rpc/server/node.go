@@ -12,8 +12,10 @@ import (
 	"math/rand"
 	"net"
 	"os"
+	"os/exec"
 	"strconv"
 	"time"
+	"virtualNode_rpc/client"
 	"virtualNode_rpc/internal"
 )
 
@@ -106,10 +108,13 @@ func rpcServer(errChannel chan<- error) {
 func (n NodeServer) Deploy(ctx context.Context, deploy *pb.InstanceDeploy) (*pb.InstanceDeployReply, error) {
 	list := deploy.List
 	for _, instanceInfo := range list {
+		resp, _ := client.GetGatewayClient().GetFuncInfo(context.Background(), &pb.GetFuncInfoReq{FuncName: instanceInfo.FuncName}) //此处可以拿到document，但是暂时没做json的解析和配置，所以不使用，仅形式上应用
+		document := resp.FuncInfo
+		dockerStart(instanceInfo.FuncName, document) //
 		newInstance := &internal.InstanceInfo{
 			RequestId:         instanceInfo.RequestId,
 			FuncName:          instanceInfo.FuncName,
-			Address:           randomIP().String(),
+			Address:           localIp,
 			DispatcherAddress: instanceInfo.DispatcherAddr,
 		}
 		DeployQueue.Enqueue(newInstance)
@@ -119,7 +124,15 @@ func (n NodeServer) Deploy(ctx context.Context, deploy *pb.InstanceDeploy) (*pb.
 
 	return &pb.InstanceDeployReply{State: 0}, nil
 }
-
+func dockerStart(name, document string) string {
+	//document暂时用不到，如果需要支持例如docker启动选项等内容可以用上
+	cmd := exec.Command("docker run", name)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		log.Errorln(err)
+	}
+	return string(out)
+}
 func InstanceInfoInform() {
 	for {
 		instanceInfo := DeployQueue.Dequeue()
