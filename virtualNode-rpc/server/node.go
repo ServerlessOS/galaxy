@@ -81,27 +81,12 @@ func register() {
 		log.Fatalln("dial gateway error:", err)
 	}
 	client := pb.NewGatewayClient(connGateway)
-	if isIPAddress(localRpcAddr) {
-		tcpAddr, err := net.ResolveTCPAddr("tcp", localRpcAddr)
-		_, err = client.Register(ctx, &pb.RegisterReq{
-			Type:    4, //    coordinator = 0; funcManager = 1;
-			Name:    nodeName,
-			Address: tcpAddr.IP.String(),
-		})
-		if err != nil {
-			log.Fatalln(err)
-		}
-	} else {
-		_, err = client.Register(ctx, &pb.RegisterReq{
-			Type:    4, //    coordinator = 0; funcManager = 1;
-			Name:    nodeName,
-			Address: localIp,
-		})
-		if err != nil {
-			log.Fatalln(err)
-		}
-	}
-
+	tcpAddr, err := net.ResolveTCPAddr("tcp", localRpcAddr)
+	_, err = client.Register(ctx, &pb.RegisterReq{
+		Type:    4, //    coordinator = 0; funcManager = 1;
+		Name:    nodeName,
+		Address: tcpAddr.IP.String(),
+	})
 }
 func rpcServer(errChannel chan<- error) {
 	lis, err := net.Listen("tcp", localRpcAddr)

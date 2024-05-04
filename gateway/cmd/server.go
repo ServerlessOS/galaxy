@@ -84,45 +84,24 @@ func initGateway() {
 	}
 	log.Println("coordinator connect success")
 	//既可以让gateway自己向顶层控制器注册，也可以经由其它gateway向顶层控制器注册，为了保证gateway0和gateway1做法一致，所以采用自行注册的方案
-	if isIPAddress(localRpcAddr) {
-		tcpAddr, err := net.ResolveTCPAddr("tcp", localRpcAddr)
-		if err != nil {
-			log.Fatalln(err)
-		}
-		if tcpAddr.IP.String() == "<nil>" { //todo:!这里的判断有问题
-			client.GetCoordinatorClient().Register(context.Background(), &gateway_rpc.RegisterReq{
-				Type:    0,
-				Name:    gatewayName,
-				Address: localIp,
-			})
-			log.Println("register gateway,ip:", localIp)
-		} else {
-			client.GetCoordinatorClient().Register(context.Background(), &gateway_rpc.RegisterReq{
-				Type:    0,
-				Name:    gatewayName,
-				Address: tcpAddr.IP.String(),
-			})
-			log.Println("register gateway,ip:", tcpAddr.IP.String())
-		}
-	} else {
-		client.GetCoordinatorClient().Register(context.Background(), &gateway_rpc.RegisterReq{
-			Type:    0,
-			Name:    gatewayName,
-			Address: localRpcAddr,
-		})
-		log.Println("register gateway,ip:", localRpcAddr)
-		if err != nil {
-			log.Fatalln(err)
-		}
+	tcpAddr, err := net.ResolveTCPAddr("tcp", localRpcAddr)
+	if err != nil {
+		log.Fatalln(err)
 	}
-
+	client.GetCoordinatorClient().Register(context.Background(), &gateway_rpc.RegisterReq{
+		Type:    0,
+		Name:    gatewayName,
+		Address: tcpAddr.IP.String(),
+	})
+	log.Println("register gateway,ip:", tcpAddr.IP.String())
 }
 
 func httpServer(errChannel chan<- error) {
-	//gateway与上游DNS服务器对接与扩容
+	//gateway与上游DNS服务器对接
 	http.HandleFunc("/getGatewayList", getGatewayList)
 
-	http.HandleFunc("/create", create)
+	http.HandleFunc("/create", create)         //此处的create是创造实例
+	http.HandleFunc("/createFile", createFile) //此处的create是创造函数
 	log.Println("http address:", localHttpAddr)
 	err := http.ListenAndServe(localHttpAddr, nil)
 	errChannel <- err
@@ -255,16 +234,60 @@ func create(w http.ResponseWriter, req *http.Request) {
 	funcName := queryParams.Get("funcName")
 	requireCpuString := queryParams.Get("requireCpu")
 	requireMemString := queryParams.Get("requireMem")
-	requireCpu, _ := strconv.Atoi(requireCpuString)
-	requireMem, _ := strconv.Atoi(requireMemString)
+	if requireCpuString == "" || requireMemString == "" {
+		w.WriteHeader(400)
+		w.Write([]byte("lack cpu and mem value"))
+	}
+	requireCpu, err := strconv.Atoi(requireCpuString)
+	if err != nil {
+		w.WriteHeader(400)
+		w.Write([]byte("value abnormal"))
+	}
+	requireMem, err := strconv.Atoi(requireMemString)
+	if err != nil {
+		w.WriteHeader(400)
+		w.Write([]byte("value abnormal"))
+	}
 	//调用dispatcher
-	_, err := client.GetDispatcherClient().Dispatch(context.Background(), &gateway_rpc.UserRequestList{List: []*gateway_rpc.UserRequest{
+	_, err = client.GetDispatcherClient().Dispatch(context.Background(), &gateway_rpc.UserRequestList{List: []*gateway_rpc.UserRequest{
 		{RequestId: rand.Int63(), FuncName: funcName, RequireCpu: int64(requireCpu), RequireMem: int64(requireMem)},
 	}})
 	if err != nil {
-		log.Fatalln(err)
+		log.Errorln(err)
+		w.WriteHeader(400)
+		w.Write([]byte("dispatcher err."))
+		return
 	}
 	log.Println("dispatcher success.")
+	// 发送成功的 HTTP 响应
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("create success."))
+}
+func createFile(w http.ResponseWriter, req *http.Request) {
+	// 解析 URL 中的查询参数
+	queryParams := req.URL.Query()
+	// 获取特定参数的值
+	funcName := queryParams.Get("funcName")
+	lable := queryParams.Get("Lable")
+	annotation := queryParams.Get("Annotation")
+	document := queryParams.Get("Document")
+	//调用dispatcher
+	_, err := client.GetFuncManagerClient().Create(context.Background(), &gateway_rpc.CreateReq{
+		Request: &gateway_rpc.GeneralRequest{
+			RequestId: 0,
+			Name:      funcName,
+			Labels:    lable,
+		},
+		Annotations: annotation,
+		Document:    document,
+	})
+	if err != nil {
+		log.Errorln(err)
+		w.WriteHeader(400)
+		w.Write([]byte("Create function err."))
+		return
+	}
+	log.Println("Create function success.")
 	// 发送成功的 HTTP 响应
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("create success."))
@@ -275,13 +298,6 @@ func getGatewayList(w http.ResponseWriter, req *http.Request) {
 		log.Errorln(err)
 	}
 	w.Write(listString)
-}
-func isIPAddress(addr string) bool {
-	ip, _, err := net.SplitHostPort(addr)
-	if err != nil {
-		return false
-	}
-	return net.ParseIP(ip) != nil
 }
 func getLocalIPv4() net.IP {
 	addrs, err := net.InterfaceAddrs()
