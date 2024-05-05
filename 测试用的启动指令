@@ -4,9 +4,9 @@
     期望的运行环境是linux环境，但基于windows环境的测试运转良好
 启动指令：
     注意有顺序区别，目前仅保证按顺序测试时运转正常
-    ./coordinator_rpc
+    ./coordinator-rpc
     ./gateway -c "127.0.0.1" -r "127.0.0.1:16448"
     ./func-manager -g "127.0.0.1" -r "127.0.0.1:16449"
-    ./dispatcher_rpc -g "127.0.0.1" -r "127.0.0.1:16444"
-    ./scheduler_rpc -g "127.0.0.1" -r "127.0.0.1:16445"
-    ./virtualNode_rpc -g "127.0.0.1" -r "127.0.0.1:16446"
+    ./dispatcher-rpc -g "127.0.0.1" -r "127.0.0.1:16444"
+    ./scheduler-rpc -g "127.0.0.1" -r "127.0.0.1:16445"
+    ./virtualNode-rpc -g "127.0.0.1" -r "127.0.0.1:16446"

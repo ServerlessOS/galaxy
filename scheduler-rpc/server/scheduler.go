@@ -92,25 +92,14 @@ func register() {
 		log.Fatalln("dial gateway error:", err)
 	}
 	client := pb.NewGatewayClient(connGateway)
-	if isIPAddress(localRpcAddr) {
-		tcpAddr, err := net.ResolveTCPAddr("tcp", localRpcAddr)
-		_, err = client.Register(ctx, &pb.RegisterReq{
-			Type:    3, //    coordinator = 0; funcManager = 1;
-			Name:    schedulerName,
-			Address: tcpAddr.IP.String(),
-		})
-		if err != nil {
-			log.Fatalln(err)
-		}
-	} else {
-		_, err = client.Register(ctx, &pb.RegisterReq{
-			Type:    3, //    coordinator = 0; funcManager = 1;
-			Name:    schedulerName,
-			Address: localIp,
-		})
-		if err != nil {
-			log.Fatalln(err)
-		}
+	tcpAddr, err := net.ResolveTCPAddr("tcp", localRpcAddr)
+	_, err = client.Register(ctx, &pb.RegisterReq{
+		Type:    3, //    coordinator = 0; funcManager = 1;
+		Name:    schedulerName,
+		Address: tcpAddr.IP.String(),
+	})
+	if err != nil {
+		log.Fatalln(err)
 	}
 
 }

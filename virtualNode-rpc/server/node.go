@@ -76,19 +76,16 @@ func Run(cmd *cobra.Command) (code int) {
 }
 func register() {
 	//通过gateway向顶层控制器注册
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
-	defer cancel()
-	connGateway, err := grpc.Dial(gatewayAddr+":"+constant.GatewayRpcPort, grpc.WithInsecure(), grpc.WithTimeout(time.Second*3))
-	if err != nil {
-		log.Fatalln("dial gateway error:", err)
-	}
-	client := pb.NewGatewayClient(connGateway)
-	tcpAddr, err := net.ResolveTCPAddr("tcp", localRpcAddr)
-	_, err = client.Register(ctx, &pb.RegisterReq{
+	client.DialGatewayClient("default", gatewayAddr)
+	tcpAddr, _ := net.ResolveTCPAddr("tcp", localRpcAddr)
+	_, err := client.GetGatewayClient().Register(context.Background(), &pb.RegisterReq{
 		Type:    4, //    coordinator = 0; funcManager = 1;
 		Name:    nodeName,
 		Address: tcpAddr.IP.String(),
 	})
+	if err != nil {
+		log.Fatalln(err)
+	}
 }
 func rpcServer(errChannel chan<- error) {
 	lis, err := net.Listen("tcp", localRpcAddr)
@@ -108,9 +105,10 @@ func rpcServer(errChannel chan<- error) {
 func (n NodeServer) Deploy(ctx context.Context, deploy *pb.InstanceDeploy) (*pb.InstanceDeployReply, error) {
 	list := deploy.List
 	for _, instanceInfo := range list {
-		resp, _ := client.GetGatewayClient().GetFuncInfo(context.Background(), &pb.GetFuncInfoReq{FuncName: instanceInfo.FuncName}) //此处可以拿到document，但是暂时没做json的解析和配置，所以不使用，仅形式上应用
-		document := resp.FuncInfo
-		dockerStart(instanceInfo.FuncName, document) //
+		log.Println("deploy instance")
+		//resp, _ := client.GetGatewayClient().GetFuncInfo(context.Background(), &pb.GetFuncInfoReq{FuncName: instanceInfo.FuncName}) //此处可以拿到document，但是暂时没做json的解析和配置，所以不使用，仅形式上应用
+		//document := resp.FuncInfo
+		dockerStart(instanceInfo.FuncName, "") //这里可以填入document，但是需要先预定义document相关的内容
 		newInstance := &internal.InstanceInfo{
 			RequestId:         instanceInfo.RequestId,
 			FuncName:          instanceInfo.FuncName,
@@ -126,11 +124,12 @@ func (n NodeServer) Deploy(ctx context.Context, deploy *pb.InstanceDeploy) (*pb.
 }
 func dockerStart(name, document string) string {
 	//document暂时用不到，如果需要支持例如docker启动选项等内容可以用上
-	cmd := exec.Command("docker run", name)
-	out, err := cmd.CombinedOutput()
+	cmd := exec.Command("docker", "run", name) //todo：权且将name当作imageName，后期最好使用document定义
+	out, err := cmd.CombinedOutput()           //todo：注意这是阻塞的
 	if err != nil {
 		log.Errorln(err)
 	}
+	log.Println("Command output:", string(out))
 	return string(out)
 }
 func InstanceInfoInform() {

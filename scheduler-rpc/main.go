@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+	go server.Schedule()
 	code := server.Run(server.Cmd)
 	os.Exit(code)
 }

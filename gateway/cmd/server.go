@@ -9,6 +9,7 @@ import (
 	gateway_rpc "github.com/ServerlessOS/galaxy/proto"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"golang.org/x/exp/maps"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/peer"
 	"math/rand"
@@ -143,17 +144,27 @@ func (r rpcServerProcess) UpdateGatewayList(ctx context.Context, req *gateway_rp
 	//    APPEND = 0;
 	//    REDUCE = 1;
 	//    OVERRIDE = 2;
+	log.Println("update gateway list")
 	switch req.Type {
 	case 0:
 		for k, v := range req.List {
 			gatewayList[k] = v
+			client.DialGatewayClient(k, v)
 		}
 	case 1:
 		for k, _ := range req.List {
+			//todo:应该删掉对应的连接
 			delete(gatewayList, k)
 		}
 	case 2:
-		gatewayList = req.List
+		if req.List == nil {
+			maps.Clear(gatewayList)
+		} else {
+			gatewayList = req.List
+			for k, v := range gatewayList {
+				client.DialGatewayClient(k, v)
+			}
+		}
 	default:
 		return &gateway_rpc.UpdateListResp{
 			StatusCode:  1,
@@ -170,17 +181,27 @@ func (r rpcServerProcess) UpdateDispatcherList(ctx context.Context, req *gateway
 	//    APPEND = 0;
 	//    REDUCE = 1;
 	//    OVERRIDE = 2;
+	log.Println("update dispatcher list")
 	switch req.Type {
 	case 0:
 		for k, v := range req.List {
 			dispatcherList[k] = v
+			client.DialDispatcherClient(k, v)
 		}
 	case 1:
+		//todo：删除旧连接
 		for k, _ := range req.List {
 			delete(dispatcherList, k)
 		}
 	case 2:
-		dispatcherList = req.List
+		if req.List == nil {
+			maps.Clear(dispatcherList)
+		} else {
+			dispatcherList = req.List
+			for k, v := range dispatcherList {
+				client.DialDispatcherClient(k, v)
+			}
+		}
 	default:
 		return &gateway_rpc.UpdateListResp{
 			StatusCode:  1,
@@ -197,17 +218,27 @@ func (r rpcServerProcess) UpdateFuncManagerList(ctx context.Context, req *gatewa
 	//    APPEND = 0;
 	//    REDUCE = 1;
 	//    OVERRIDE = 2;
+	log.Println("update func-manager list")
 	switch req.Type {
 	case 0:
 		for k, v := range req.List {
 			funcManagerList[k] = v
+			client.DialFuncManagerClient(k, v)
 		}
 	case 1:
+		//todo:删除旧连接
 		for k, _ := range req.List {
 			delete(funcManagerList, k)
 		}
 	case 2:
-		funcManagerList = req.List
+		if req.List == nil {
+			maps.Clear(funcManagerList)
+		} else {
+			funcManagerList = req.List
+			for k, v := range funcManagerList {
+				client.DialFuncManagerClient(k, v)
+			}
+		}
 	default:
 		return &gateway_rpc.UpdateListResp{
 			StatusCode:  1,
