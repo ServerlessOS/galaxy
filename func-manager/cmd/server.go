@@ -40,7 +40,7 @@ type function struct {
 }
 
 var Cmd = &cobra.Command{
-	Use:   "gateway",
+	Use:   "func-manager",
 	Short: `初始化func-manager程序`,
 	//本函数用于执行命令并返回错误
 	RunE: func(cmd *cobra.Command, args []string) error {

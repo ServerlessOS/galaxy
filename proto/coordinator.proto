@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 option go_package = "./;proto";
-package dispatcher;
+package coordinator;
 
 import "gateway.proto";
 // 1. 请求分发

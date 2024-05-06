@@ -1,0 +1,7 @@
+syntax = "proto3";
+option go_package = "./;proto";
+package ClusterManager;
+import "gateway.proto";
+service ClusterManager {
+rpc MoniterUpload(gateway_rpc.MoniterUploadReq)returns(gateway_rpc.MoniterUploadResp){}
+}

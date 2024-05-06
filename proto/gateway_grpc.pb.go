@@ -27,6 +27,7 @@ type GatewayClient interface {
 	UpdateFuncManagerList(ctx context.Context, in *UpdateListReq, opts ...grpc.CallOption) (*UpdateListResp, error)
 	GetFuncInfo(ctx context.Context, in *GetFuncInfoReq, opts ...grpc.CallOption) (*GetFuncInfoResp, error)
 	Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
+	MoniterUpload(ctx context.Context, in *MoniterUploadReq, opts ...grpc.CallOption) (*MoniterUploadResp, error)
 }
 
 type gatewayClient struct {
@@ -82,6 +83,15 @@ func (c *gatewayClient) Register(ctx context.Context, in *RegisterReq, opts ...g
 	return out, nil
 }
 
+func (c *gatewayClient) MoniterUpload(ctx context.Context, in *MoniterUploadReq, opts ...grpc.CallOption) (*MoniterUploadResp, error) {
+	out := new(MoniterUploadResp)
+	err := c.cc.Invoke(ctx, "/gateway_rpc.Gateway/MoniterUpload", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GatewayServer is the server API for Gateway service.
 // All implementations should embed UnimplementedGatewayServer
 // for forward compatibility
@@ -91,6 +101,7 @@ type GatewayServer interface {
 	UpdateFuncManagerList(context.Context, *UpdateListReq) (*UpdateListResp, error)
 	GetFuncInfo(context.Context, *GetFuncInfoReq) (*GetFuncInfoResp, error)
 	Register(context.Context, *RegisterReq) (*RegisterResp, error)
+	MoniterUpload(context.Context, *MoniterUploadReq) (*MoniterUploadResp, error)
 }
 
 // UnimplementedGatewayServer should be embedded to have forward compatible implementations.
@@ -111,6 +122,9 @@ func (UnimplementedGatewayServer) GetFuncInfo(context.Context, *GetFuncInfoReq) 
 }
 func (UnimplementedGatewayServer) Register(context.Context, *RegisterReq) (*RegisterResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
+}
+func (UnimplementedGatewayServer) MoniterUpload(context.Context, *MoniterUploadReq) (*MoniterUploadResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MoniterUpload not implemented")
 }
 
 // UnsafeGatewayServer may be embedded to opt out of forward compatibility for this service.
@@ -214,6 +228,24 @@ func _Gateway_Register_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Gateway_MoniterUpload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MoniterUploadReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GatewayServer).MoniterUpload(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gateway_rpc.Gateway/MoniterUpload",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GatewayServer).MoniterUpload(ctx, req.(*MoniterUploadReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Gateway_ServiceDesc is the grpc.ServiceDesc for Gateway service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -240,6 +272,10 @@ var Gateway_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Register",
 			Handler:    _Gateway_Register_Handler,
+		},
+		{
+			MethodName: "MoniterUpload",
+			Handler:    _Gateway_MoniterUpload_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
