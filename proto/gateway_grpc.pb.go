@@ -25,6 +25,7 @@ type GatewayClient interface {
 	UpdateGatewayList(ctx context.Context, in *UpdateListReq, opts ...grpc.CallOption) (*UpdateListResp, error)
 	UpdateDispatcherList(ctx context.Context, in *UpdateListReq, opts ...grpc.CallOption) (*UpdateListResp, error)
 	UpdateFuncManagerList(ctx context.Context, in *UpdateListReq, opts ...grpc.CallOption) (*UpdateListResp, error)
+	UpdateClusterManagerList(ctx context.Context, in *UpdateListReq, opts ...grpc.CallOption) (*UpdateListResp, error)
 	GetFuncInfo(ctx context.Context, in *GetFuncInfoReq, opts ...grpc.CallOption) (*GetFuncInfoResp, error)
 	Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 	MoniterUpload(ctx context.Context, in *MoniterUploadReq, opts ...grpc.CallOption) (*MoniterUploadResp, error)
@@ -65,6 +66,15 @@ func (c *gatewayClient) UpdateFuncManagerList(ctx context.Context, in *UpdateLis
 	return out, nil
 }
 
+func (c *gatewayClient) UpdateClusterManagerList(ctx context.Context, in *UpdateListReq, opts ...grpc.CallOption) (*UpdateListResp, error) {
+	out := new(UpdateListResp)
+	err := c.cc.Invoke(ctx, "/gateway_rpc.Gateway/UpdateClusterManagerList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *gatewayClient) GetFuncInfo(ctx context.Context, in *GetFuncInfoReq, opts ...grpc.CallOption) (*GetFuncInfoResp, error) {
 	out := new(GetFuncInfoResp)
 	err := c.cc.Invoke(ctx, "/gateway_rpc.Gateway/GetFuncInfo", in, out, opts...)
@@ -99,6 +109,7 @@ type GatewayServer interface {
 	UpdateGatewayList(context.Context, *UpdateListReq) (*UpdateListResp, error)
 	UpdateDispatcherList(context.Context, *UpdateListReq) (*UpdateListResp, error)
 	UpdateFuncManagerList(context.Context, *UpdateListReq) (*UpdateListResp, error)
+	UpdateClusterManagerList(context.Context, *UpdateListReq) (*UpdateListResp, error)
 	GetFuncInfo(context.Context, *GetFuncInfoReq) (*GetFuncInfoResp, error)
 	Register(context.Context, *RegisterReq) (*RegisterResp, error)
 	MoniterUpload(context.Context, *MoniterUploadReq) (*MoniterUploadResp, error)
@@ -116,6 +127,9 @@ func (UnimplementedGatewayServer) UpdateDispatcherList(context.Context, *UpdateL
 }
 func (UnimplementedGatewayServer) UpdateFuncManagerList(context.Context, *UpdateListReq) (*UpdateListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateFuncManagerList not implemented")
+}
+func (UnimplementedGatewayServer) UpdateClusterManagerList(context.Context, *UpdateListReq) (*UpdateListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateClusterManagerList not implemented")
 }
 func (UnimplementedGatewayServer) GetFuncInfo(context.Context, *GetFuncInfoReq) (*GetFuncInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFuncInfo not implemented")
@@ -192,6 +206,24 @@ func _Gateway_UpdateFuncManagerList_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Gateway_UpdateClusterManagerList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GatewayServer).UpdateClusterManagerList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gateway_rpc.Gateway/UpdateClusterManagerList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GatewayServer).UpdateClusterManagerList(ctx, req.(*UpdateListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Gateway_GetFuncInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetFuncInfoReq)
 	if err := dec(in); err != nil {
@@ -264,6 +296,10 @@ var Gateway_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateFuncManagerList",
 			Handler:    _Gateway_UpdateFuncManagerList_Handler,
+		},
+		{
+			MethodName: "UpdateClusterManagerList",
+			Handler:    _Gateway_UpdateClusterManagerList_Handler,
 		},
 		{
 			MethodName: "GetFuncInfo",

@@ -101,6 +101,11 @@ func rpcServer(errChannel chan<- error) {
 	err = s.Serve(lis)
 	errChannel <- err
 }
+func (r rpcServerProcess) MoniterUpload(ctx context.Context, req *proto.MoniterUploadReq) (*proto.MoniterUploadResp, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func getLocalIPv4() net.IP {
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {

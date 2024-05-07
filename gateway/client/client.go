@@ -19,8 +19,22 @@ var (
 	CclientDefault proto.CoordinatorClient
 	Fclient        = make(map[string]proto.FuncManagerClient)
 	FclientDefault proto.FuncManagerClient
+	Mclient        = make(map[string]proto.ClusterManagerClient)
+	MclientDefault proto.ClusterManagerClient
 )
 
+func DialClusterManagerClient(id string, address string) error {
+	connClusterManager, err := grpc.Dial(address+":"+constant.ClusterManagerPort, grpc.WithInsecure())
+	if err != nil {
+		return err
+	}
+	client := proto.NewClusterManagerClient(connClusterManager)
+	Mclient[id] = client
+	if MclientDefault == nil {
+		MclientDefault = client
+	}
+	return nil
+}
 func DialFuncManagerClient(id string, address string) error {
 	connFuncManager, err := grpc.Dial(address+":"+constant.FuncManagerPort, grpc.WithInsecure())
 	if err != nil {

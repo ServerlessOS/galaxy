@@ -101,6 +101,20 @@ func (c CoordiantorServer) Register(ctx context.Context, req *pb.RegisterReq) (*
 			StatusCode:        0,
 			CustomInformation: "",
 		}, nil
+	case 5:
+		module := &register.ClusterManager{}
+		err := module.Register(req)
+		if err != nil {
+			log.Errorln(err)
+			return &pb.RegisterResp{
+				StatusCode:        1,
+				CustomInformation: "have some err",
+			}, err
+		}
+		return &pb.RegisterResp{
+			StatusCode:        0,
+			CustomInformation: "",
+		}, nil
 	default:
 		return &pb.RegisterResp{
 			StatusCode:        1,

@@ -32,6 +32,8 @@ var (
 	dispatcherList_mutex sync.Mutex
 	funcManagerList      = make(map[string]string)
 	funcManager_mutex    sync.Mutex
+	clusterManagerList   = make(map[string]string)
+	clusterManager_mutex sync.Mutex
 	localIp              = getLocalIPv4().String()
 )
 var Cmd = &cobra.Command{
@@ -126,6 +128,11 @@ func rpcServer(errChannel chan<- error) {
 
 type rpcServerProcess struct{}
 
+func (r rpcServerProcess) MoniterUpload(ctx context.Context, req *gateway_rpc.MoniterUploadReq) (*gateway_rpc.MoniterUploadResp, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (r rpcServerProcess) GetFuncInfo(ctx context.Context, req *gateway_rpc.GetFuncInfoReq) (*gateway_rpc.GetFuncInfoResp, error) {
 	resp, err := client.GetFuncManagerClient().Get(ctx, &gateway_rpc.GetReq{Request: &gateway_rpc.GeneralRequest{
 		RequestId: 0,
@@ -137,6 +144,42 @@ func (r rpcServerProcess) GetFuncInfo(ctx context.Context, req *gateway_rpc.GetF
 	return &gateway_rpc.GetFuncInfoResp{
 		StatusCode: 0,
 		FuncInfo:   resp.Document,
+	}, nil
+}
+func (r rpcServerProcess) UpdateClusterManagerList(ctx context.Context, req *gateway_rpc.UpdateListReq) (*gateway_rpc.UpdateListResp, error) {
+	//    APPEND = 0;
+	//    REDUCE = 1;
+	//    OVERRIDE = 2;
+	log.Println("update cluster manager list")
+	switch req.Type {
+	case 0:
+		for k, v := range req.List {
+			clusterManagerList[k] = v
+			client.DialClusterManagerClient(k, v)
+		}
+	case 1:
+		for k, _ := range req.List {
+			//todo:应该删掉对应的连接
+			delete(clusterManagerList, k)
+		}
+	case 2:
+		if req.List == nil {
+			maps.Clear(clusterManagerList)
+		} else {
+			clusterManagerList = req.List
+			for k, v := range clusterManagerList {
+				client.DialClusterManagerClient(k, v)
+			}
+		}
+	default:
+		return &gateway_rpc.UpdateListResp{
+			StatusCode:  1,
+			Description: "undefined operation type",
+		}, fmt.Errorf("undefined operation type")
+	}
+	return &gateway_rpc.UpdateListResp{
+		StatusCode:  0,
+		Description: "OK",
 	}, nil
 }
 

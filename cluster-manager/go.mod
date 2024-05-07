@@ -3,7 +3,7 @@ module cluster-manager
 go 1.22
 
 require (
-	github.com/ServerlessOS/galaxy v0.0.0-20240505095016-d48b9e6ffcbb
+	github.com/ServerlessOS/galaxy v0.0.0-20240506181604-92c50a255b19
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.0
 	google.golang.org/grpc v1.63.2
