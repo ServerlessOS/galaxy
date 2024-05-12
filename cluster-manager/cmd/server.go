@@ -213,7 +213,7 @@ func patrol() {
 			tempCountCpu += v.cpuload
 			tempCountMem += v.memload
 		}
-		if tempCountCpu*10 > len(gatewayMonitor)*(loadFactorCpu*10) {
+		if tempCountCpu*10 > len(gatewayMonitor)*(loadFactorCpu*10) || tempCountMem*10 > len(gatewayMonitor)*(loadFactorMem*10) {
 			// 发起HTTP GET请求
 			resp, err := http.Get(gatewayAddr + ":" + constant.GatewayHttpPort + "/create?" + "funcName=gateway&requireCpu=4&requireMem=4")
 			if err != nil {
@@ -225,7 +225,7 @@ func patrol() {
 			tempCountCpu += v.cpuload
 			tempCountMem += v.memload
 		}
-		if tempCountCpu*10 > len(funcManagerMonitor)*(loadFactorCpu*10) {
+		if tempCountCpu*10 > len(funcManagerMonitor)*(loadFactorCpu*10) || tempCountMem*10 > len(gatewayMonitor)*(loadFactorMem*10) {
 			// 发起HTTP GET请求
 			resp, err := http.Get(gatewayAddr + ":" + constant.GatewayHttpPort + "/create?" + "funcName=funcManager&requireCpu=4&requireMem=4")
 			if err != nil {
@@ -237,7 +237,7 @@ func patrol() {
 			tempCountCpu += v.cpuload
 			tempCountMem += v.memload
 		}
-		if tempCountCpu*10 > len(dispatcherMonitor)*(loadFactorCpu*10) {
+		if tempCountCpu*10 > len(dispatcherMonitor)*(loadFactorCpu*10) || tempCountMem*10 > len(gatewayMonitor)*(loadFactorMem*10) {
 			// 发起HTTP GET请求
 			resp, err := http.Get(gatewayAddr + ":" + constant.GatewayHttpPort + "/create?" + "funcName=dispatcher&requireCpu=4&requireMem=4")
 			if err != nil {
@@ -249,7 +249,7 @@ func patrol() {
 			tempCountCpu += v.cpuload
 			tempCountMem += v.memload
 		}
-		if tempCountCpu*10 > len(schedulerMonitor)*(loadFactorCpu*10) {
+		if tempCountCpu*10 > len(schedulerMonitor)*(loadFactorCpu*10) || tempCountMem*10 > len(gatewayMonitor)*(loadFactorMem*10) {
 			// 发起HTTP GET请求
 			resp, err := http.Get(gatewayAddr + ":" + constant.GatewayHttpPort + "/create?" + "funcName=scheduler&requireCpu=4&requireMem=4")
 			if err != nil {
@@ -261,7 +261,7 @@ func patrol() {
 			tempCountCpu += v.cpuload
 			tempCountMem += v.memload
 		}
-		if tempCountCpu*10 > len(nodeMonitor)*(loadFactorCpu*10) {
+		if tempCountCpu*10 > len(nodeMonitor)*(loadFactorCpu*10) || tempCountMem*10 > len(gatewayMonitor)*(loadFactorMem*10) {
 			// 发起HTTP GET请求
 			resp, err := http.Get(gatewayAddr + ":" + constant.GatewayHttpPort + "/create?" + "funcName=node&requireCpu=4&requireMem=4")
 			if err != nil {
