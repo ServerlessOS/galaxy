@@ -13,7 +13,7 @@
 - coordinator-rpc为顶层控制器，无需启动参数
 - gateway网关，要求使用`-c` 指明顶层控制器的地址，可以使用`-r`和`-p`分别指定本地rpc和http绑定的地址也可以不指定
 - 其它组件，要求使用`-g`指明网关地址，可以使用`-r`指定本地rpc绑定的地址
-# 使用
+## 使用
 目前仅实装了`getGatewayList`、`create`、`createFile`api接口
 
 - `http://gatewayAddress:port/getGatewaylist`其中`gatewayAddress:port`需要替换为对应地址，用于上游DDNS服务实现网址网关一对多负载均衡
