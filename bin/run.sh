@@ -31,3 +31,4 @@ echo "virtualNode-rpc started, waiting for 3 seconds..."
 sleep 3
 
 echo "All components started."
+
