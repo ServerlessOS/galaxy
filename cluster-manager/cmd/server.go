@@ -11,8 +11,10 @@ import (
 	"google.golang.org/grpc"
 	"math/rand/v2"
 	"net"
+	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -22,8 +24,20 @@ var (
 	clusterManagerName string
 	ExitCh             = make(chan int)
 	localIp            = getLocalIPv4().String()
+	gatewayMonitor     = make(map[string]load) //name与负载的映射
+	funcManagerMonitor = make(map[string]load)
+	dispatcherMonitor  = make(map[string]load)
+	schedulerMonitor   = make(map[string]load)
+	nodeMonitor        = make(map[string]load)
 )
 
+const loadFactorCpu = 0.8
+const loadFactorMem = 0.5
+
+type load struct {
+	cpuload int
+	memload int
+}
 type rpcServerProcess struct{}
 
 var Cmd = &cobra.Command{
@@ -38,6 +52,7 @@ var Cmd = &cobra.Command{
 		}
 		register()
 		rpcServer(errChanRpc)
+		go patrol()
 		err := <-errChanRpc
 		if err != nil {
 			fmt.Printf("Error occurred: %v\n", err)
@@ -102,8 +117,75 @@ func rpcServer(errChannel chan<- error) {
 	errChannel <- err
 }
 func (r rpcServerProcess) MoniterUpload(ctx context.Context, req *proto.MoniterUploadReq) (*proto.MoniterUploadResp, error) {
-	//TODO implement me
-	panic("implement me")
+	//gateway = 0;
+	//funcManager = 1;
+	//dispatcher  = 2;
+	//scheduler  = 3;
+	//node  = 4;
+	switch req.Type {
+	case 0:
+		name, performance := req.Name, req.Performance
+		//performance格式cpuload=?&memload=？
+		parts := strings.Split(performance, "&")
+		cpuload, _ := strconv.Atoi(parts[0])
+		memload, _ := strconv.Atoi(parts[1])
+		gatewayMonitor[name] = load{
+			cpuload: cpuload,
+			memload: memload,
+		}
+		return &proto.MoniterUploadResp{StatusCode: 0}, nil
+
+	case 1:
+		name, performance := req.Name, req.Performance
+		//performance格式cpuload=?&memload=？
+		parts := strings.Split(performance, "&")
+		cpuload, _ := strconv.Atoi(parts[0])
+		memload, _ := strconv.Atoi(parts[1])
+		funcManagerMonitor[name] = load{
+			cpuload: cpuload,
+			memload: memload,
+		}
+		return &proto.MoniterUploadResp{StatusCode: 0}, nil
+
+	case 2:
+		name, performance := req.Name, req.Performance
+		//performance格式cpuload=?&memload=？
+		parts := strings.Split(performance, "&")
+		cpuload, _ := strconv.Atoi(parts[0])
+		memload, _ := strconv.Atoi(parts[1])
+		dispatcherMonitor[name] = load{
+			cpuload: cpuload,
+			memload: memload,
+		}
+		return &proto.MoniterUploadResp{StatusCode: 0}, nil
+
+	case 3:
+		name, performance := req.Name, req.Performance
+		//performance格式cpuload=?&memload=？
+		parts := strings.Split(performance, "&")
+		cpuload, _ := strconv.Atoi(parts[0])
+		memload, _ := strconv.Atoi(parts[1])
+		schedulerMonitor[name] = load{
+			cpuload: cpuload,
+			memload: memload,
+		}
+		return &proto.MoniterUploadResp{StatusCode: 0}, nil
+
+	case 4:
+		name, performance := req.Name, req.Performance
+		//performance格式cpuload=?&memload=？
+		parts := strings.Split(performance, "&")
+		cpuload, _ := strconv.Atoi(parts[0])
+		memload, _ := strconv.Atoi(parts[1])
+		nodeMonitor[name] = load{
+			cpuload: cpuload,
+			memload: memload,
+		}
+		return &proto.MoniterUploadResp{StatusCode: 0}, nil
+
+	default:
+		return nil, fmt.Errorf("unknown type")
+	}
 }
 
 func getLocalIPv4() net.IP {
@@ -121,4 +203,71 @@ func getLocalIPv4() net.IP {
 		}
 	}
 	return nil
+}
+
+func patrol() {
+	for {
+		time.Sleep(time.Second * 5)
+		var tempCountCpu, tempCountMem int
+		for _, v := range gatewayMonitor { //todo：面对实时修改的map使用range可能会出问题
+			tempCountCpu += v.cpuload
+			tempCountMem += v.memload
+		}
+		if tempCountCpu*10 > len(gatewayMonitor)*(loadFactorCpu*10) {
+			// 发起HTTP GET请求
+			resp, err := http.Get(gatewayAddr + ":" + constant.GatewayHttpPort + "/create?" + "funcName=gateway&requireCpu=4&requireMem=4")
+			if err != nil {
+				fmt.Errorf("扩容失败:", err)
+			}
+			resp.Body.Close()
+		}
+		for _, v := range funcManagerMonitor { //todo：面对实时修改的map使用range可能会出问题
+			tempCountCpu += v.cpuload
+			tempCountMem += v.memload
+		}
+		if tempCountCpu*10 > len(funcManagerMonitor)*(loadFactorCpu*10) {
+			// 发起HTTP GET请求
+			resp, err := http.Get(gatewayAddr + ":" + constant.GatewayHttpPort + "/create?" + "funcName=funcManager&requireCpu=4&requireMem=4")
+			if err != nil {
+				fmt.Errorf("扩容失败:", err)
+			}
+			resp.Body.Close()
+		}
+		for _, v := range dispatcherMonitor { //todo：面对实时修改的map使用range可能会出问题
+			tempCountCpu += v.cpuload
+			tempCountMem += v.memload
+		}
+		if tempCountCpu*10 > len(dispatcherMonitor)*(loadFactorCpu*10) {
+			// 发起HTTP GET请求
+			resp, err := http.Get(gatewayAddr + ":" + constant.GatewayHttpPort + "/create?" + "funcName=dispatcher&requireCpu=4&requireMem=4")
+			if err != nil {
+				fmt.Errorf("扩容失败:", err)
+			}
+			resp.Body.Close()
+		}
+		for _, v := range schedulerMonitor { //todo：面对实时修改的map使用range可能会出问题
+			tempCountCpu += v.cpuload
+			tempCountMem += v.memload
+		}
+		if tempCountCpu*10 > len(schedulerMonitor)*(loadFactorCpu*10) {
+			// 发起HTTP GET请求
+			resp, err := http.Get(gatewayAddr + ":" + constant.GatewayHttpPort + "/create?" + "funcName=scheduler&requireCpu=4&requireMem=4")
+			if err != nil {
+				fmt.Errorf("扩容失败:", err)
+			}
+			resp.Body.Close()
+		}
+		for _, v := range nodeMonitor { //todo：面对实时修改的map使用range可能会出问题
+			tempCountCpu += v.cpuload
+			tempCountMem += v.memload
+		}
+		if tempCountCpu*10 > len(nodeMonitor)*(loadFactorCpu*10) {
+			// 发起HTTP GET请求
+			resp, err := http.Get(gatewayAddr + ":" + constant.GatewayHttpPort + "/create?" + "funcName=node&requireCpu=4&requireMem=4")
+			if err != nil {
+				fmt.Errorf("扩容失败:", err)
+			}
+			resp.Body.Close()
+		}
+	}
 }

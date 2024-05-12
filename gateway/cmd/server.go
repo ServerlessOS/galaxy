@@ -129,8 +129,11 @@ func rpcServer(errChannel chan<- error) {
 type rpcServerProcess struct{}
 
 func (r rpcServerProcess) MoniterUpload(ctx context.Context, req *gateway_rpc.MoniterUploadReq) (*gateway_rpc.MoniterUploadResp, error) {
-	//TODO implement me
-	panic("implement me")
+	resp, err := client.GetClusterManagerClient().MoniterUpload(ctx, req)
+	if err != nil || resp.StatusCode != 0 {
+		return nil, err
+	}
+	return resp, nil
 }
 
 func (r rpcServerProcess) GetFuncInfo(ctx context.Context, req *gateway_rpc.GetFuncInfoReq) (*gateway_rpc.GetFuncInfoResp, error) {

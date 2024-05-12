@@ -108,7 +108,12 @@ func DialNodeClient(id string, address string) error {
 	}
 	return nil
 }
-
+func GetClusterManagerClient(m ...string) proto.ClusterManagerClient {
+	if m == nil || len(m) > 1 {
+		return MclientDefault
+	}
+	return Mclient[m[0]]
+}
 func GetSchedulerClient(s ...string) proto.SchedulerClient {
 	if s == nil || len(s) > 1 {
 		return SclientDefault
